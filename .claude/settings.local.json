@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ide__getDiagnostics",
+      "Bash(npx prisma *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "WebSearch",
+      "Bash(node *)",
+      "Bash(nslookup db.cfpbrogsnsjtgwrnangw.supabase.co)"
+    ]
+  }
+}
