@@ -13,12 +13,13 @@ export default async function CategoryPage({
   searchParams: Promise<{ page?: string }>
 }) {
   const { slug } = await params
+  const decodedSlug = decodeURIComponent(slug)
   const { page: pageParam } = await searchParams
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
 
   const [category, { posts, totalPages }] = await Promise.all([
-    getCategoryBySlug(slug),
-    getPublishedPosts({ page, categorySlug: slug }),
+    getCategoryBySlug(decodedSlug),
+    getPublishedPosts({ page, categorySlug: decodedSlug }),
   ])
 
   if (!category) notFound()
@@ -32,7 +33,7 @@ export default async function CategoryPage({
           <PostCard key={post.id} post={post} />
         ))}
       </div>
-      <Pagination page={page} totalPages={totalPages} baseUrl={`/categories/${slug}`} />
+      <Pagination page={page} totalPages={totalPages} baseUrl={`/categories/${decodedSlug}`} />
     </div>
   )
 }

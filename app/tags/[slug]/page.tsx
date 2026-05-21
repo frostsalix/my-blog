@@ -13,12 +13,13 @@ export default async function TagPage({
   searchParams: Promise<{ page?: string }>
 }) {
   const { slug } = await params
+  const decodedSlug = decodeURIComponent(slug)
   const { page: pageParam } = await searchParams
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
 
   const [tag, { posts, totalPages }] = await Promise.all([
-    getTagBySlug(slug),
-    getPublishedPosts({ page, tagSlug: slug }),
+    getTagBySlug(decodedSlug),
+    getPublishedPosts({ page, tagSlug: decodedSlug }),
   ])
 
   if (!tag) notFound()
@@ -32,7 +33,7 @@ export default async function TagPage({
           <PostCard key={post.id} post={post} />
         ))}
       </div>
-      <Pagination page={page} totalPages={totalPages} baseUrl={`/tags/${slug}`} />
+      <Pagination page={page} totalPages={totalPages} baseUrl={`/tags/${decodedSlug}`} />
     </div>
   )
 }
