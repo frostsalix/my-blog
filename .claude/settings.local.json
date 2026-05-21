@@ -7,7 +7,9 @@
       "Bash(npm run *)",
       "WebSearch",
       "Bash(node *)",
-      "Bash(nslookup db.cfpbrogsnsjtgwrnangw.supabase.co)"
+      "Bash(nslookup db.cfpbrogsnsjtgwrnangw.supabase.co)",
+      "Bash(npx shadcn@latest init -d --force)",
+      "Bash(npx shadcn@latest add card input textarea label badge -y)"
     ]
   }
 }
