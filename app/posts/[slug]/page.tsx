@@ -15,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const post = await getPostBySlug(decodeURIComponent(slug))
   if (!post) return { title: "Not Found" }
   return {
     title: post.title,
@@ -29,26 +29,11 @@ export default async function PostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const decodedSlug = decodeURIComponent(slug)
+  const post = await getPostBySlug(decodedSlug)
 
-  if (!post) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-red-600">Debug: Post not found</h1>
-        <p className="mt-2">Slug from params: <code className="bg-muted px-1 rounded">{slug}</code></p>
-      </div>
-    )
-  }
-
-  if (!post.published) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-orange-600">Debug: Post found but not published</h1>
-        <p className="mt-2">Title: {post.title}</p>
-        <p className="mt-1">Slug: <code className="bg-muted px-1 rounded">{post.slug}</code></p>
-        <p className="mt-1">Published: {String(post.published)}</p>
-      </div>
-    )
+  if (!post || !post.published) {
+    notFound()
   }
 
   const tags = post.tags.map((pt) => pt.tag)
