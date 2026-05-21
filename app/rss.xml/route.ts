@@ -18,7 +18,7 @@ export async function GET() {
   })
 
   const feed = new Feed({
-    title: "My Blog",
+    title: "frostsalix blog",
     description: "A personal blog",
     id: SITE_URL,
     link: SITE_URL,

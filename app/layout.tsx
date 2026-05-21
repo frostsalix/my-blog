@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.AUTH_URL ?? "http://localhost:3000"),
   title: {
-    default: "My Blog",
-    template: "%s | My Blog",
+    default: "frostsalix blog",
+    template: "%s | frostsalix blog",
   },
   description: "A personal blog built with Next.js",
   alternates: {
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "My Blog",
-    title: "My Blog",
+    siteName: "frostsalix blog",
+    title: "frostsalix blog",
     description: "A personal blog built with Next.js",
   },
   twitter: {
     card: "summary",
-    title: "My Blog",
+    title: "frostsalix blog",
     description: "A personal blog built with Next.js",
   },
   robots: {

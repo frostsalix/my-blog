@@ -5,8 +5,8 @@ export function Header() {
   return (
     <header className="border-b sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="max-w-4xl mx-auto flex items-center justify-between h-14 px-4">
-        <Link href="/" className="font-bold text-lg">
-          My Blog
+        <Link href="/" className="font-bold text-lg italic">
+          frostsalix blog
         </Link>
         <nav className="flex items-center gap-4 text-sm text-muted-foreground">
           <Link href="/" className="hover:text-foreground transition-colors">
@@ -20,12 +20,6 @@ export function Header() {
           </Link>
           <Link href="/rss.xml" className="hover:text-foreground transition-colors">
             RSS
-          </Link>
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium hover:bg-muted transition-colors"
-          >
-            Admin
           </Link>
           <ThemeToggle />
         </nav>
