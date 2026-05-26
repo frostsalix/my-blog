@@ -19,6 +19,6 @@ test("opens search dialog", async ({ page }) => {
 
 test("header logo links to home", async ({ page }) => {
   await page.goto("/about")
-  await page.getByRole("link", { name: "frostsalix's blog" }).click()
+  await page.getByRole("link", { name: "sayliks's blog" }).click()
   await expect(page).toHaveURL("/")
 })
