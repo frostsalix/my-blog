@@ -49,7 +49,9 @@
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(x['path']\\) for x in d.get\\('tree',[]\\) if 'graph' in x['path'].lower\\(\\)]\")",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('message','no message'\\)\\); print\\('truncated:', d.get\\('truncated','?'\\)\\); print\\('tree count:', len\\(d.get\\('tree',[]\\)\\)\\)\")",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('default_branch:', d.get\\('default_branch','?'\\)\\); print\\('description:', d.get\\('description','?'\\)\\)\")",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(npx next *)",
+      "Bash(grep -E \"Route|ƒ.*\\\\/$|●.*\\\\/$\")"
     ]
   }
 }
