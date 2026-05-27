@@ -4,6 +4,33 @@
 
 ---
 
+## 审查 #16 — 2026-05-27 23:00
+
+**分支**: master (ahead of origin by 17 commits)
+**未提交业务变更** (10 files, +113/-115):
+
+### 新增变更（相对审查 #15）
+
+- `components/blog/CommentSection.tsx` — `<img>` → `<Image>` (2 处)
+- `next.config.ts` — 添加 `images.remotePatterns` for `avatars.githubusercontent.com`
+- `__tests__/MarkdownRenderer.test.tsx` — 移除多余 eslint-disable 注释
+
+### 审查结论
+
+**本次新增变更合理，无问题。**
+
+- CommentSection.tsx: 与 CommentForm.tsx 一致，`<img>` → `<Image>`，好改进
+- next.config.ts: `remotePatterns` 配置正确，为 GitHub avatar CDN 添加白名单
+- MarkdownRenderer.test.tsx: 移除不必要的 eslint-disable 注释，好
+- **ESLint: 0 errors, 0 warnings** — 全部清理完毕
+
+### 遗留问题
+
+- Header.tsx 缩进问题（#14 已报告）仍未修复
+- KnowledgeGraph.tsx `mounted` 守卫移除（#15 已报告）
+
+---
+
 ## 审查 #15 — 2026-05-27 22:45
 
 **分支**: master (ahead of origin by 16 commits)
@@ -61,19 +88,3 @@
 - SearchDialog.tsx: 添加 eslint-disable 注释，合理
 - lib/auth.ts: 添加 eslint-disable 注释（`@typescript-eslint/no-explicit-any`），合理
 - Backlinks/KnowledgeGraph/ThemeToggle: 与此前审查结论一致
-
----
-
-## 审查 #13 — 2026-05-27 22:15（文档深度审查，第五轮）
-
-**范围**: CLAUDE.md + AGENTS.md 目录结构交叉验证
-
-### 本次文档发现
-
-**~~[低] AGENTS.md:44 lib/ 文件列表缺失 5 个~~ → 已修复**
-
-- 补充 `graph.ts`、`markdown.ts`、`remark-wiki-link.ts`、`slug.ts`、`utils.ts`
-
-**~~[低] AGENTS.md:43 components/ 缺失 auth/ 目录~~ → 已修复**
-
-- 补充 `auth/`（含 SessionProviderWrapper）
