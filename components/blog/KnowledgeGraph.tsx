@@ -9,6 +9,8 @@ import type { GraphData } from "@/lib/graph"
 
 const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), { ssr: false })
 
+type ForceGraphMethods = { zoomToFit(duration?: number): void }
+
 function hexFromOklch(l: number, c: number, h: number): string {
   const a = c * Math.cos((h * Math.PI) / 180)
   const b = c * Math.sin((h * Math.PI) / 180)
@@ -51,14 +53,13 @@ function colorForGroup(group: string): string {
   return color
 }
 
-interface GraphNodeData {
-  id: string
-  title: string
-  slug: string
-  group: string
-  val: number
+type GraphNode = GraphData["nodes"][number] & {
   x?: number
   y?: number
+}
+interface GraphLink {
+  source: string | { id: string }
+  target: string | { id: string }
 }
 
 export function KnowledgeGraph() {
@@ -68,16 +69,13 @@ export function KnowledgeGraph() {
   const [data, setData] = useState<GraphData | null>(null)
   const [error, setError] = useState(false)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
-  const [mounted, setMounted] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const fgRef = useRef<any>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 500 })
+  const containerRef = useRef<HTMLDivElement>(null)
+  const fgRef = useRef<ForceGraphMethods | null>(null)
 
-  const isDark = mounted && resolvedTheme === "dark"
+  const isDark = resolvedTheme === "dark"
 
   useEffect(() => {
-    setMounted(true)
     fetch("/api/graph")
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -121,7 +119,7 @@ export function KnowledgeGraph() {
   }, [hoveredId, data])
 
   const nodeColor = useCallback(
-    (node: GraphNodeData) => {
+    (node: GraphNode) => {
       if (hoveredId && neighbors.size > 0) {
         return neighbors.has(node.id) ? colorForGroup(node.group) : "rgba(100,100,100,0.15)"
       }
@@ -131,8 +129,7 @@ export function KnowledgeGraph() {
   )
 
   const linkColor = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (link: any) => {
+    (link: GraphLink) => {
       if (hoveredId && neighbors.size > 0) {
         const sourceId = typeof link.source === "string" ? link.source : link.source?.id ?? ""
         const targetId = typeof link.target === "string" ? link.target : link.target?.id ?? ""
@@ -145,9 +142,8 @@ export function KnowledgeGraph() {
     [hoveredId, neighbors, isDark]
   )
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const nodeCanvasObject = useCallback(
-    (node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
+    (node: GraphNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
       const x = node.x ?? 0
       const y = node.y ?? 0
       const size = Math.sqrt(node.val) * 4 + 3
@@ -176,16 +172,14 @@ export function KnowledgeGraph() {
   )
 
   const handleNodeClick = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (node: any) => {
+    (node: GraphNode) => {
       if (node.slug) router.push(`/posts/${node.slug}`)
     },
     [router]
   )
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const nodePointerAreaPaint = useCallback(
-    (node: any, color: string, ctx: CanvasRenderingContext2D) => {
+    (node: GraphNode, color: string, ctx: CanvasRenderingContext2D) => {
       const size = Math.sqrt(node.val) * 4 + 3
       ctx.fillStyle = color
       ctx.beginPath()
@@ -196,8 +190,7 @@ export function KnowledgeGraph() {
   )
 
   const handleNodeHover = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (node: any) => setHoveredId(node?.id ?? null),
+    (node: GraphNode | null) => setHoveredId(node?.id ?? null),
     []
   )
 
@@ -225,6 +218,7 @@ export function KnowledgeGraph() {
       className="relative w-full h-[60vh] min-h-[400px] max-h-[700px] rounded-lg overflow-hidden"
       style={{ background: isDark ? "#09090b" : "#fafafa" }}
     >
+      {/* @ts-expect-error ForceGraph2D generic types don't match our custom GraphNode/GraphLink */}
       <ForceGraph2D
         ref={fgRef}
         graphData={data}

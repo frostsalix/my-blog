@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -21,6 +22,7 @@ export function CommentForm({ postId }: { postId: string }) {
   const [success, setSuccess] = useState(false)
   const router = useRouter()
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!isAuthenticated) {
       setContent("")
@@ -28,6 +30,7 @@ export function CommentForm({ postId }: { postId: string }) {
       setSuccess(false)
     }
   }, [isAuthenticated])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -92,20 +95,15 @@ export function CommentForm({ postId }: { postId: string }) {
       <div className="border-t pt-6 mt-6">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
           {session.user?.image && (
-            <img
+            <Image
               src={session.user.image}
               alt=""
+              width={24}
+              height={24}
               className="size-6 rounded-full"
             />
           )}
           <span>{t("signedInAs", { name: session.user?.name ?? "" })}</span>
-          <button
-            type="button"
-            onClick={() => signOut()}
-            className="text-xs underline hover:text-foreground"
-          >
-            {t("signOut")}
-          </button>
         </div>
         <p className="text-sm text-muted-foreground">{t("commentSubmitted")}</p>
       </div>
@@ -118,20 +116,15 @@ export function CommentForm({ postId }: { postId: string }) {
 
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         {session.user?.image && (
-          <img
+          <Image
             src={session.user.image}
             alt=""
+            width={24}
+            height={24}
             className="size-6 rounded-full"
           />
         )}
         <span>{t("signedInAs", { name: session.user?.name ?? "" })}</span>
-        <button
-          type="button"
-          onClick={() => signOut()}
-          className="text-xs underline hover:text-foreground"
-        >
-          {t("signOut")}
-        </button>
       </div>
 
       <div className="space-y-2">

@@ -45,6 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id as string
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         token.role = (user as any).role as string | undefined
       }
       if (account?.provider === "github" && user?.image) {

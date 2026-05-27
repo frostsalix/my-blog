@@ -10,7 +10,6 @@ import "@testing-library/jest-dom"
 
 jest.mock("react-markdown", () => {
   const MockReactMarkdown = ({ children }: { children: string }) => (
-    // eslint-disable-next-line react/no-children-prop
     <div data-testid="markdown-content">{children}</div>
   )
   return { __esModule: true, default: MockReactMarkdown }

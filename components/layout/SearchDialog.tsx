@@ -29,20 +29,16 @@ export function SearchDialog() {
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
+  // Focus input when dialog opens
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 100)
-    } else {
-      setQuery("")
-      setResults([])
     }
   }, [open])
 
+  // Debounced search
   useEffect(() => {
-    if (!query.trim()) {
-      setResults([])
-      return
-    }
+    if (!query.trim()) return
 
     const timer = setTimeout(async () => {
       setLoading(true)
@@ -59,6 +55,14 @@ export function SearchDialog() {
 
     return () => clearTimeout(timer)
   }, [query])
+
+  const handleOpenChange = useCallback((nextOpen: boolean) => {
+    setOpen(nextOpen)
+    if (!nextOpen) {
+      setQuery("")
+      setResults([])
+    }
+  }, [])
 
   const handleSelect = useCallback(
     (slug: string) => {
@@ -78,7 +82,7 @@ export function SearchDialog() {
   )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <Button
         variant="ghost"
         size="sm"
