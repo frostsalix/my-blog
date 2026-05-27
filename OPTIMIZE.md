@@ -2,6 +2,7 @@
 
 > 最后更新：2026-05-27
 > 基于全量代码审计生成
+> P0 已全部修复 (2026-05-27)
 
 ---
 
@@ -19,36 +20,33 @@
 | Graph API 缓存 | ✅ | `Cache-Control: s-maxage=3600, stale-while-revalidate=86400` |
 | Tailwind v4 tree-shaking | ✅ | 自动清除未使用样式 |
 | next/font/google | ✅ | 字体自托管 + `font-display: swap` |
+| Backlinks 图谱缓存 | ✅ | 60s 内存缓存 + 图谱反向查找，不再加载全文 |
+| 首页 ISR | ✅ | `revalidate = 60`，不再每个请求查库 |
+| next/image 头像 | ✅ | GitHub 头像使用 `<Image>` + remotePatterns |
+| PostEditor 延迟加载 | ✅ | `next/dynamic` 预览 tab，admin 不打包 highlight.js |
+| MarkdownRenderer 插件常量 | ✅ | remark/rehype 数组提取到模块级 |
 
 ---
 
 ## 待修复项
 
-### P0 — 影响核心体验
+### P0 — 影响核心体验 ✅ 已全部修复
 
-#### 1. Backlinks 全表加载
+#### 1. ~~Backlinks 全表加载~~ ✅
 
-- **文件**: `components/blog/Backlinks.tsx`
-- **问题**: 每次文章页加载时，查询**所有**已发布文章的 `content` 字段到内存，再用 JS 正则逐篇匹配。文章多了之后内存和 CPU 开销巨大
-- **修复方案**: 预计算 wiki-link 关系到数据库表，或用 `Prisma contains` 做数据库层预筛选（已有部分实现，但正则二次匹配仍加载全文）。可将 link 关系在 `lib/graph.ts` 构建时写入缓存/数据库
+- **修复**: `lib/graph.ts` 新增 `getCachedGraphData` (60s 内存缓存) + `getBacklinksFromGraph` 反向查找。Backlinks 组件不再逐篇加载全文做正则匹配，复用图谱数据。
 
-#### 2. 首页 force-dynamic
+#### 2. ~~首页 force-dynamic~~ ✅
 
-- **文件**: `app/page.tsx:7`
-- **问题**: `export const dynamic = "force-dynamic"` 导致每个请求都查数据库。首页展示知识图谱数据，变化不频繁
-- **修复方案**: 改为 `export const revalidate = 60` 或与 `/posts` 页面合并（首页已不是文章列表，是图谱，图谱 API 已有 CDN 缓存）
+- **修复**: `app/page.tsx` 改为 `export const revalidate = 60` (ISR)。
 
-#### 3. 没有使用 next/image
+#### 3. ~~没有使用 next/image~~ ✅
 
-- **文件**: `components/blog/CommentSection.tsx`, `components/blog/CommentForm.tsx`
-- **问题**: GitHub 头像用 `<img>` 标签，无 width/height/alt，导致 CLS 且不走 Next.js 图片优化
-- **修复方案**: 将 `<img>` 替换为 `<Image>`，配置 `next.config.ts` 的 `images.remotePatterns` 允许 `avatars.githubusercontent.com`
+- **修复**: CommentSection + CommentForm 中 `<img>` 全部替换为 `<Image>`。`next.config.ts` 添加 `images.remotePatterns` 允许 `avatars.githubusercontent.com`。
 
-#### 4. highlight.js 打入客户端 JS
+#### 4. ~~highlight.js 打入客户端 JS~~ ✅
 
-- **文件**: `components/blog/MarkdownRenderer.tsx`
-- **问题**: `rehype-highlight` 将完整的 highlight.js (~250KB) 打包进客户端。PostEditor 的预览 tab 每次都会加载
-- **修复方案**: 在 PostEditor 中对预览 tab 使用 `next/dynamic` 延迟加载 MarkdownRenderer；或在 MarkdownRenderer 中动态 import `rehype-highlight`
+- **修复**: PostEditor 中 MarkdownRenderer 改为 `next/dynamic` + `{ ssr: false }`，点击预览 tab 才加载。插件数组提取为模块级常量。
 
 ---
 
@@ -105,10 +103,9 @@
 - **文件**: `app/api/search/route.ts`
 - **修复方案**: 添加 `Cache-Control: public, s-maxage=60, stale-while-revalidate=300`
 
-#### 13. MarkdownRenderer 插件数组每次渲染重建
+#### 13. ~~MarkdownRenderer 插件数组每次渲染重建~~ ✅
 
-- **文件**: `components/blog/MarkdownRenderer.tsx:15-16`
-- **修复方案**: 将 `remarkPlugins` 和 `rehypePlugins` 数组提取为模块级常量
+- **修复**: `remarkPlugins` 和 `rehypePlugins` 已提取为模块级常量。
 
 #### 14. KnowledgeGraph 节点尺寸重复计算
 
