@@ -1,6 +1,22 @@
 # 代码审查与文档优化记录
 
-> 每 5 分钟自动审查，只审查和提交文档，不修改业务代码。
+> 每小时自动审查，只审查和提交文档，不修改业务代码。
+
+---
+
+## 审查 #13 — 2026-05-27 22:15（文档深度审查，第五轮）
+
+**范围**: CLAUDE.md + AGENTS.md 目录结构交叉验证
+
+### 发现的问题
+
+**~~[低] AGENTS.md:44 lib/ 文件列表缺失 5 个~~ → 已修复**
+
+- 补充 `graph.ts`、`markdown.ts`、`remark-wiki-link.ts`、`slug.ts`、`utils.ts`
+
+**~~[低] AGENTS.md:43 components/ 缺失 auth/ 目录~~ → 已修复**
+
+- 补充 `auth/`（含 SessionProviderWrapper）
 
 ---
 

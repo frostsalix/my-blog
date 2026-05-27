@@ -40,8 +40,8 @@ Locale resolved from `NEXT_LOCALE` cookie → `Accept-Language` header → defau
 
 ## Architecture
 - `app/` — App Router pages & API routes
-- `components/` — UI: `ui/` (primitives), `layout/`, `blog/`, `admin/`
-- `lib/` — Shared: `prisma.ts`, `auth.ts`, `queries.ts`, `validations.ts`, `env.ts`, `wiki-link.ts`
+- `components/` — UI: `ui/` (primitives), `layout/`, `blog/`, `admin/`, `auth/`
+- `lib/` — Shared: `prisma.ts`, `auth.ts`, `queries.ts`, `validations.ts`, `env.ts`, `wiki-link.ts`, `remark-wiki-link.ts`, `graph.ts`, `markdown.ts`, `slug.ts`, `utils.ts`
 - `messages/` — i18n: `en.json`, `zh.json` (~15 namespaces)
 - `prisma/` — Schema, seed, migrations
 
