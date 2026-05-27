@@ -4,6 +4,47 @@
 
 ---
 
+## 审查 #8 — 2026-05-28 00:00
+
+**分支**: master (ahead of origin by 21 commits)
+**未提交业务变更** (8 files, +167/-107): 批量修复审查 #7 问题
+
+### 已修复（审查 #7 问题）
+
+**安全**:
+
+- ✅ [高] comments/route.ts — `userId` 不再来自请求体，改用 `session.user.id`
+- ✅ [高] posts/route.ts — 标签替换改为 `prisma.$transaction()` 事务
+- ✅ [高] posts/route.ts — `session.user.id!` 非空断言已移除，添加 `!session.user.id` 检查
+- ✅ [中] posts/route.ts — id 使用 `z.string().cuid()` 校验（PUT + DELETE）
+
+**错误处理**:
+
+- ✅ [高] posts/route.ts — Prisma create/update/delete 全部加 try/catch + console.error
+- ✅ [中] comments/route.ts — Prisma create + findMany 加 try/catch
+- ✅ [中] graph/route.ts — catch 中添加 console.error
+- ✅ [中] CommentForm.tsx — fetch 改为 try/catch/finally，`setSubmitting(false)` 放入 finally
+- ✅ [中] SearchDialog.tsx — 添加 `if (!res.ok) throw`
+
+**i18n / 一致性**:
+
+- ✅ [高] RecentPosts.tsx — `<a>` → `<Link>`，`toLocaleDateString("zh-CN")` → `formatDate()`
+- ✅ [中] 两个 route 添加 `request.json()` try/catch
+- ✅ [低] SearchDialog.tsx — 移除多余的 `"搜索中..."` 回退
+- ✅ [低] posts/route.ts + comments/route.ts — 添加 `export const runtime = "nodejs"`
+- ✅ validations.ts — 移除 `userId` 字段
+
+### 本次审查结论
+
+**变更合理，是审查 #7 发现问题的系统性修复。**
+
+- 所有 4 个高优先级安全问题已解决
+- 绝大部分中优先级错误处理问题已解决
+- 无新引入问题
+- 剩余未修复：可访问性（alt=""、aria-label）、死代码、Admin 直接调用 Prisma
+
+---
+
 ## 审查 #7 — 2026-05-27 23:30（全量代码审查）
 
 **分支**: master (ahead of origin by 19 commits)
@@ -238,17 +279,3 @@
 - Header.tsx 缩进问题（#14 报告）已随 1ab0080 一并修复
 - KnowledgeGraph.tsx mounted 守卫（#15 报告）已通过 `@ts-expect-error` + `ForceGraphMethods` 类型解决
 - PLAN.md / refactoring.md 与代码一致
-
----
-
-## 审查 #5 — 2026-05-27 20:40（当前状态）
-
-**结果**: 0 errors, 0 warnings ✓
-
-**变更摘要**:
-- Backlinks.tsx: try/catch → .catch() 链式调用
-- CommentForm.tsx: 添加 eslint-disable 注释
-- KnowledgeGraph.tsx: 移除 `any` 类型，使用自定义类型 + `@ts-expect-error`
-- SearchDialog.tsx: 移除 eslint-disable，效果不明显
-- ThemeToggle.tsx: 移除 `useEffect` + `mounted` 状态，简化为 `useState(true)`
-- Header.tsx: `'` → `&apos;` 实体转义
