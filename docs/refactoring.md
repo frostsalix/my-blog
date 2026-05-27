@@ -6,7 +6,7 @@ Evolving from personal blog to AI knowledge management system with unified Docum
 
 **Everything is a Document.** Posts, notes, and pages share one table with types.
 
-```
+```text
 User
  └─ Document
      ├─ Tag
@@ -137,13 +137,14 @@ model AISummary {
 ## Wiki-link Relations
 
 Wiki-link syntax (`[[target|alias]]`) parses to `DocumentRelation` records, enabling:
+
 - Knowledge graph visualization
 - Backlinks panel
 - Related posts
 
 ## AI Pipeline
 
-```
+```text
 User question → embedding → vector search → chunk recall → LLM answer
 ```
 

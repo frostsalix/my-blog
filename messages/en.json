@@ -1,0 +1,144 @@
+{
+  "common": {
+    "articles": "Articles",
+    "about": "About",
+    "search": "Search",
+    "admin": "Admin",
+    "signOut": "Sign Out",
+    "backToHome": "Back to Home",
+    "tryAgain": "Try Again",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title": "About",
+    "bio": "My dream is to become an interesting person",
+    "skills": "Tech Stack & Tools",
+    "links": {
+      "title": "Links"
+    }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search articles...",
+    "noQuery": "Enter a keyword to search.",
+    "noResults": "No articles found.",
+    "results": "Found {count} results for \"{query}\"",
+    "loading": "Searching...",
+    "hint": "Press Enter to open first result, Esc to close"
+  },
+  "post": {
+    "notFound": "Post not found",
+    "by": "By",
+    "draft": "Draft",
+    "comments": "Comments",
+    "leaveComment": "Leave a Comment",
+    "reply": "Reply",
+    "submitComment": "Submit",
+    "name": "Name",
+    "email": "Email (optional)",
+    "content": "Comment",
+    "submitting": "Submitting...",
+    "commentSubmitted": "Comment submitted, pending approval.",
+    "failedToSubmitComment": "Failed to submit comment",
+    "signInWithGithub": "Sign in with GitHub",
+    "signedInAs": "Signed in as {name}",
+    "signOut": "Sign Out",
+    "loginRequiredToComment": "Please sign in with GitHub to comment."
+  },
+  "admin": {
+    "blogAdmin": "Blog Admin",
+    "dashboard": "Dashboard",
+    "posts": "Posts",
+    "categories": "Categories",
+    "tags": "Tags",
+    "comments": "Comments",
+    "newPost": "New Post",
+    "editPost": "Edit Post",
+    "title": "Title",
+    "content": "Content",
+    "summary": "Summary",
+    "coverImage": "Cover Image URL",
+    "category": "Category",
+    "published": "Published",
+    "draft": "Draft",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure?",
+    "postCreated": "Post created",
+    "postUpdated": "Post updated",
+    "failedToSave": "Failed to save",
+    "status": "Status",
+    "date": "Date",
+    "actions": "Actions",
+    "name": "Name",
+    "author": "Author",
+    "post": "Post",
+    "pendingComments": "Pending Comments",
+    "noPosts": "No posts yet. Create your first post!",
+    "noPendingComments": "No pending comments.",
+    "add": "Add",
+    "approve": "Approve",
+    "viewPost": "View Post",
+    "createPost": "Create Post",
+    "updatePost": "Update Post",
+    "saving": "Saving...",
+    "none": "None",
+    "contentMarkdown": "Content (Markdown)",
+    "summaryPlaceholder": "Brief description for SEO and preview",
+    "coverImagePlaceholder": "https://example.com/image.jpg",
+    "titlePlaceholder": "Post title",
+    "categoryNamePlaceholder": "Category name",
+    "tagNamePlaceholder": "Tag name",
+    "write": "Write",
+    "preview": "Preview",
+    "markdownPlaceholder": "Write your post in Markdown...",
+    "nothingToPreview": "Nothing to preview."
+  },
+  "footer": {
+    "copyright": "Powered by Next.js"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved."
+  },
+  "error": {
+    "title": "Something Went Wrong",
+    "description": "An unexpected error occurred. Please try again."
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Page {page} of {total}"
+  },
+  "categories": {
+    "title": "Category: {name}",
+    "postCount": "{count} posts"
+  },
+  "tags": {
+    "title": "Tag: {name}",
+    "postCount": "{count} posts"
+  },
+  "posts": {
+    "title": "Posts",
+    "noPosts": "No posts yet"
+  },
+  "home": {
+    "siteTitle": "My Blog",
+    "tagline": "Recording thoughts, sharing knowledge",
+    "recentPosts": "Recent Posts"
+  },
+  "graph": {
+    "backlinks": "Backlinks",
+    "loading": "Loading graph..."
+  },
+  "auth": {
+    "title": "Admin Login",
+    "description": "Sign in to manage your blog",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "invalidCredentials": "Invalid email or password"
+  }
+}
