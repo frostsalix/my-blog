@@ -11,10 +11,11 @@ import { formatDateLong } from "@/lib/utils"
 import type { Metadata } from "next"
 
 export const revalidate = 3600
+export const dynamicParams = true
 
 export async function generateStaticParams() {
   const { getPublishedPosts } = await import("@/lib/queries")
-  const { posts } = await getPublishedPosts({ page: 1, pageSize: 5 })
+  const { posts } = await getPublishedPosts({ page: 1, pageSize: 20 })
   return posts.map((post) => ({ slug: post.slug }))
 }
 
@@ -23,12 +24,16 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const { slug } = await params
-  const post = await getPostBySlug(decodeURIComponent(slug))
-  if (!post) return { title: "Not Found" }
-  return {
-    title: post.title,
-    description: post.summary ?? undefined,
+  try {
+    const { slug } = await params
+    const post = await getPostBySlug(decodeURIComponent(slug))
+    if (!post) return { title: "Not Found" }
+    return {
+      title: post.title,
+      description: post.summary ?? undefined,
+    }
+  } catch {
+    return { title: "Not Found" }
   }
 }
 
@@ -39,7 +44,14 @@ export default async function PostPage({
 }) {
   const { slug } = await params
   const decodedSlug = decodeURIComponent(slug)
-  const post = await getPostBySlug(decodedSlug)
+
+  let post
+  try {
+    post = await getPostBySlug(decodedSlug)
+  } catch {
+    notFound()
+  }
+
   const t = await getTranslations("post")
 
   if (!post || !post.published) {
