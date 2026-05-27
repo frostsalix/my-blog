@@ -1,7 +1,7 @@
 # my-blog 全栈开发计划
 
 > 项目：个人全栈博客 · 制定日期：2026-05-21
-> 最后更新：2026-05-27 — Phase 0-11 全部完成，47 tests 通过
+> 最后更新：2026-05-27 — Phase 0-11 全部完成，47 tests 通过，GitHub OAuth 已移除
 
 ---
 
@@ -104,7 +104,7 @@ components/
 | 7     | 搜索（RSS 已移除） | done |
 | 8     | SEO / i18n / 暗色模式 / error boundary | done |
 | 9     | 单元测试 + E2E + 组件测试（47 tests） | done |
-| 10    | GitHub OAuth + 评论增强 | done |
+| 10    | OAuth 登录 + 评论增强（GitHub OAuth 后已移除，仅保留 Credentials） | done |
 | 11    | 知识图谱（Obsidian Graph View） | done |
 
 ---
