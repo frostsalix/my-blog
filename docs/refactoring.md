@@ -56,7 +56,7 @@ model Document {
   @@index([status])
 }
 
-enum DocumentType { POST, NOTE, PAGE, DRAFT }
+enum DocumentType { POST, NOTE, PAGE }
 enum DocumentStatus { DRAFT, PUBLISHED, ARCHIVED }
 enum Visibility { PUBLIC, PRIVATE, UNLISTED }
 

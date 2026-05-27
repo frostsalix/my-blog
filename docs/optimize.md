@@ -34,11 +34,11 @@
 - ~~[中] CLAUDE.md 首页渲染策略描述错误~~ — ISR → force-dynamic
 - ~~[低] AGENTS.md 交叉引用过度承诺~~ — 已移除
 
-**待处理**:
+**待处理** → 全部已修复:
 
-- [中] CLAUDE.md / AGENTS.md 引用 `docs/plan.md`（小写），实际文件为 `PLAN.md`（大写），Linux 上会 404
-- [中] Markdown 渲染不支持 raw HTML（安全策略），如需 `<details>` 等标签需引入 rehype-raw
-- [低] refactoring.md DocumentType 中 DRAFT 与 DocumentStatus 语义矛盾
+- ~~[中] CLAUDE.md / AGENTS.md 引用 `docs/plan.md`（小写）~~ → 已修正为 `PLAN.md`
+- ~~[中] Markdown 渲染不支持 raw HTML~~ → 已安装 `rehype-raw` 并加入 MarkdownRenderer
+- ~~[低] refactoring.md DocumentType 中 DRAFT 语义冲突~~ → 已从 DocumentType 移除 DRAFT
 
 ---
 

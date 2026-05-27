@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 import rehypeSlug from "rehype-slug"
+import rehypeRaw from "rehype-raw"
 import { remarkWikiLink } from "@/lib/remark-wiki-link"
 
 interface MarkdownRendererProps {
@@ -13,7 +14,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     <article className="prose prose-neutral dark:prose-invert max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkWikiLink, remarkGfm]}
-        rehypePlugins={[rehypeHighlight, rehypeSlug]}
+        rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
       >
         {content}
       </ReactMarkdown>

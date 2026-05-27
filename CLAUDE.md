@@ -39,7 +39,7 @@ npx prisma generate       # Runs automatically via `postinstall`
 
 ### Prisma client (Prisma 7 specifics)
 
-- **Custom output path**: client is generated to `app/generated/prisma/` (gitignored). Import the client as `import { PrismaClient } from "../app/generated/prisma/client"` or types as `import type { Prisma } from "@/app/generated/prisma/client"`. **Do NOT import from `@prisma/client`** — it won't exist.
+- **Custom output path**: client is generated to `app/generated/prisma/` (gitignored, output path in `schema.prisma` is relative to `prisma/` directory). Import the client as `import { PrismaClient } from "../app/generated/prisma/client"` or types as `import type { Prisma } from "@/app/generated/prisma/client"`. **Do NOT import from `@prisma/client`** — it won't exist.
 - **Connection**: `prisma.config.ts` holds the `datasource.url` (Prisma 7 removed `url`/`directUrl` from `schema.prisma`). Runtime uses the `PrismaPg` adapter — see `lib/prisma.ts`. The adapter is **required** in Prisma 7; constructing `new PrismaClient()` without one throws.
 - **Singleton**: `lib/prisma.ts` caches on `globalThis` for HMR.
 - **Two env URLs**: `DATABASE_URL` (pooled, port 6543, runtime) and `DIRECT_URL` (direct, port 5432, optional fallback).
@@ -91,7 +91,7 @@ Most public pages (categories, tags, search, homepage) declare `export const dyn
 
 ### Markdown rendering
 
-`react-markdown` + `remark-gfm` + `rehype-highlight` + `rehype-slug` + custom `remark-wiki-link`, styled via `@tailwindcss/typography` (`prose` classes). Renderer is `components/blog/MarkdownRenderer.tsx`.
+`react-markdown` + `remark-gfm` + `rehype-raw` + `rehype-highlight` + `rehype-slug` + custom `remark-wiki-link`, styled via `@tailwindcss/typography` (`prose` classes). Renderer is `components/blog/MarkdownRenderer.tsx`.
 
 Wiki-link syntax (`[[target|alias]]`) is supported. The regex and `extractWikiLinks()` live in `lib/wiki-link.ts` — import from there (not redefined in other files). The remark plugin (`lib/remark-wiki-link.ts`) converts `[[text]]` to `<a class="wiki-link">` links. CSS for `.wiki-link` is in `app/globals.css`.
 
