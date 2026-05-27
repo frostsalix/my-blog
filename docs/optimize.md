@@ -4,6 +4,31 @@
 
 ---
 
+## 审查 #12 — 2026-05-27 22:00
+
+**分支**: master (ahead of origin by 13 commits)
+**未提交业务变更**: 与审查 #11 相同，无新增
+
+- `components/blog/Backlinks.tsx` — try/catch → .catch()
+- `components/blog/KnowledgeGraph.tsx` — GraphNodeData → GraphNode
+- `components/layout/ThemeToggle.tsx` — useEffect 格式调整
+
+**新提交**: `ebc49de feat: add rehype-raw for HTML rendering in Markdown`
+
+- 安装 rehype-raw，添加到 MarkdownRenderer rehypePlugins
+- 修复 refactoring.md: DocumentType 移除 DRAFT
+- 更新 CLAUDE.md: rehype-raw 文档、Prisma 路径说明
+
+### 审查结论
+
+**本次审查未发现新问题。**
+
+- 未提交业务代码无变化，此前审查结论仍有效
+- refactoring.md DRAFT 问题已修复（审查 #10 待处理项已解决）
+- PLAN.md / refactoring.md 内容与代码一致
+
+---
+
 ## 审查 #11 — 2026-05-27 21:45
 
 **分支**: master (ahead of origin by 10 commits)
@@ -14,7 +39,7 @@
 - `components/layout/ThemeToggle.tsx` — useEffect 格式调整
 - `CLAUDE.md` — 仅 CRLF 换行符变更
 
-### 审查结论
+### 本次审查结果
 
 **本次代码变更合理，无安全/性能问题。**
 
@@ -39,11 +64,3 @@
 - ~~[中] CLAUDE.md / AGENTS.md 引用 `docs/plan.md`（小写）~~ → 已修正为 `PLAN.md`
 - ~~[中] Markdown 渲染不支持 raw HTML~~ → 已安装 `rehype-raw` 并加入 MarkdownRenderer
 - ~~[低] refactoring.md DocumentType 中 DRAFT 语义冲突~~ → 已从 DocumentType 移除 DRAFT
-
----
-
-## 审查 #9 — 2026-05-27 21:00（KnowledgeGraph 变更）
-
-**变更**: GraphNodeData → GraphNode 类型别名 + useEffect 拆分
-
-**结论**: 变更合理，无问题。eslint-disable 用于 react-force-graph-2d 灵活节点类型，恰当。
