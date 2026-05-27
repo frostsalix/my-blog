@@ -8,12 +8,9 @@ export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
   const t = useTranslations("common")
 
-  if (!resolvedTheme) {
-    return <div className="size-8" />
-  }
-
   return (
     <button
+      suppressHydrationWarning
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className="inline-flex items-center justify-center rounded-md size-8 hover:bg-muted transition-colors"
       aria-label={t("toggleTheme")}
