@@ -4,23 +4,34 @@
 
 ---
 
+## 审查 #16 — 2026-05-28 00:50
+
+**分支**: master (ahead of origin by 28 commits)
+**未提交业务变更** (2 files): 主题水合优化
+
+### #16 已修复
+
+- ✅ `app/layout.tsx` — `<body>` 添加 `suppressHydrationWarning`，防止主题切换水合警告
+- ✅ `ThemeToggle.tsx` — 移除 `if (!resolvedTheme)` 占位 div，按钮添加 `suppressHydrationWarning`
+
+### #16 审查结论
+
+**变更合理，无新问题。**
+
+- `suppressHydrationWarning` 是 React 官方推荐的水合警告抑制方式
+- 移除占位 div 简化了组件，未引入闪烁（默认渲染 Moon 图标）
+- 类型安全：`resolvedTheme` 在 next-themes 中类型为 `string | undefined`，三元表达式正确处理 undefined
+
+**剩余低优先级问题同审查 #9**（Admin 校验、CommentForm alt、Footer、aria-label 等）
+
+---
+
 ## 审查 #15 — 2026-05-28 00:45
 
 **分支**: master (ahead of origin by 28 commits)
 **未提交变更**: 仅 jest 测试配置 + .claude 配置，无业务代码
 
 ### #15 审查结论
-
-**本次无业务代码变更。**
-
----
-
-## 审查 #14 — 2026-05-28 00:40
-
-**分支**: master (ahead of origin by 27 commits)
-**未提交变更**: 仅 jest 测试配置 + .claude 配置，无业务代码
-
-### #14 审查结论
 
 **本次无业务代码变更。**
 
