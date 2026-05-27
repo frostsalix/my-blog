@@ -4,6 +4,36 @@
 
 ---
 
+## 审查 #15 — 2026-05-27 22:45
+
+**分支**: master (ahead of origin by 16 commits)
+**未提交业务变更** (7 files, +88/-110):
+
+### 发现的问题
+
+**[中] KnowledgeGraph.tsx:73 移除 `mounted` 守卫，可能 hydration 不匹配**
+
+- 问题: 原 `isDark = mounted && resolvedTheme === "dark"` 防止 SSR/client 主题不一致。现改为 `isDark = resolvedTheme === "dark"`，SSR 时 `resolvedTheme` 为 `undefined`，首次渲染 `isDark = false`，客户端 hydration 后可能变为 `true`
+- 修复: 恢复 `mounted` 状态守卫，或确认 next-themes 已配置 `suppressHydrationWarning`
+
+**[低] Header.tsx:12-14 缩进问题仍未修复**
+
+- 审查 #14 已报告，`<Link>` 标签缩进从 8 空格变为 0
+
+**[低] CommentForm.tsx 移除两处 sign-out 按钮**
+
+- 有意的功能简化？需确认是否影响用户登出流程
+
+### 正面改进
+
+- **ESLint 从 17 → 3 问题**（9 个 error 消除），大幅改善
+- KnowledgeGraph.tsx: 5 处 `any` → 正确类型（`GraphNode`、`GraphLink`），移除 5 个 eslint-disable 注释
+- SearchDialog.tsx: 提取 `handleOpenChange` callback，状态管理更清晰
+- CommentForm.tsx: `<img>` → `<Image>` (next/image)，移除 `signOut` import
+- `fgRef` 从 `any` → `{ zoomToFit(duration?: number): void } | null`
+
+---
+
 ## 审查 #14 — 2026-05-27 22:30
 
 **分支**: master (ahead of origin by 15 commits)
@@ -12,7 +42,7 @@
 - 新增: `CommentForm.tsx`, `Header.tsx`, `SearchDialog.tsx`, `lib/auth.ts`
 - 沿用: `Backlinks.tsx`, `KnowledgeGraph.tsx`, `ThemeToggle.tsx`
 
-### 发现的问题
+### 本次变更问题
 
 **[高] Header.tsx:12-14 缩进损坏**
 
@@ -47,28 +77,3 @@
 **~~[低] AGENTS.md:43 components/ 缺失 auth/ 目录~~ → 已修复**
 
 - 补充 `auth/`（含 SessionProviderWrapper）
-
----
-
-## 审查 #12 — 2026-05-27 22:00
-
-**分支**: master (ahead of origin by 13 commits)
-**未提交业务变更**: 与审查 #11 相同，无新增
-
-- `components/blog/Backlinks.tsx` — try/catch → .catch()
-- `components/blog/KnowledgeGraph.tsx` — GraphNodeData → GraphNode
-- `components/layout/ThemeToggle.tsx` — useEffect 格式调整
-
-**新提交**: `ebc49de feat: add rehype-raw for HTML rendering in Markdown`
-
-- 安装 rehype-raw，添加到 MarkdownRenderer rehypePlugins
-- 修复 refactoring.md: DocumentType 移除 DRAFT
-- 更新 CLAUDE.md: rehype-raw 文档、Prisma 路径说明
-
-### 审查结论
-
-**本次审查未发现新问题。**
-
-- 未提交业务代码无变化，此前审查结论仍有效
-- refactoring.md DRAFT 问题已修复（审查 #10 待处理项已解决）
-- PLAN.md / refactoring.md 内容与代码一致
