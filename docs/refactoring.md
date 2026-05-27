@@ -90,6 +90,7 @@ model DocumentRelation {
 
 enum RelationType { BACKLINK, REFERENCE, RELATED, QUOTE }
 
+// 以下模型需先安装 pgvector 扩展（项目当前未安装）
 model DocumentEmbedding {
   id        String @id @default(cuid())
   documentId String
