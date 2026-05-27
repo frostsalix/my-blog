@@ -29,13 +29,9 @@ export function AdminLayoutClient({ email, children }: AdminLayoutClientProps) {
   ]
 
   return (
-    <div className="flex min-h-screen">
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel
-          defaultSize={18}
-          minSize={12}
-          maxSize={35}
-        >
+    <div className="fixed inset-0 top-14 flex">
+      <ResizablePanelGroup orientation="horizontal">
+        <ResizablePanel defaultSize={18} minSize={12} maxSize={35}>
           <aside className="h-full border-r bg-muted/30 p-4 flex flex-col">
             <div className="mb-6">
               <Link href="/admin" className="text-xl font-bold tracking-tight">
@@ -70,7 +66,9 @@ export function AdminLayoutClient({ email, children }: AdminLayoutClientProps) {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel>
-          <main className="flex-1 p-6">{children}</main>
+          <div className="h-full overflow-auto p-6">
+            {children}
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
       <Toaster />
