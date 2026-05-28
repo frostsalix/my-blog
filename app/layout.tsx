@@ -11,28 +11,35 @@ import "./globals.css"
 const geistSans = Geist({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
 })
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 })
 
 const notoSansSC = Noto_Sans_SC({
   variable: "--font-heading",
   weight: ["400", "500", "700"],
   subsets: ["latin"],
+  display: "swap",
 })
 
 const notoSerifSC = Noto_Serif_SC({
   variable: "--font-serif",
   weight: ["400", "500", "700"],
   subsets: ["latin"],
+  display: "swap",
+  preload: false,
 })
 
 const dancingScript = Dancing_Script({
   variable: "--font-brand",
   subsets: ["latin"],
+  display: "swap",
+  preload: false,
 })
 
 export const metadata: Metadata = {
