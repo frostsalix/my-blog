@@ -1,7 +1,5 @@
 import { getPublishedPosts, getAllCategories } from "@/lib/queries"
 import { getTranslations } from "next-intl/server"
-import { PostCard } from "@/components/blog/PostCard"
-import { CategoryBadge } from "@/components/blog/CategoryBadge"
 import Link from "next/link"
 import type { Metadata } from "next"
 
@@ -17,109 +15,161 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const t = await getTranslations("home")
-  const tPosts = await getTranslations("posts")
 
-  // Get recent posts (limit to 6)
-  const { posts } = await getPublishedPosts({ page: 1, pageSize: 6 })
+  // Get recent posts
+  const { posts } = await getPublishedPosts({ page: 1, pageSize: 5 })
 
-  // Get all categories
+  // Get categories
   const categories = await getAllCategories()
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-muted/50 to-background py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-            {t("heroTitle")}
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-            {t("heroSubtitle")}
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link
-              href="/posts"
-              className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              {t("explorePosts")}
-            </Link>
-            <Link
-              href="/about"
-              className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-              {t("aboutMe")}
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Subtle grid background */}
+      <div className="fixed inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-      {/* Categories Section */}
-      {categories.length > 0 && (
-        <section className="py-12 px-4 border-b">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6">{t("categories")}</h2>
-            <div className="flex flex-wrap gap-3">
+      <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
+        {/* Hero / Introduction */}
+        <header className="mb-20">
+          <div className="flex items-start gap-6 mb-8">
+            {/* Avatar placeholder - you can replace with actual image */}
+            <div className="w-16 h-16 rounded-full bg-muted border border-border flex items-center justify-center text-2xl font-serif">
+              S
+            </div>
+            <div className="flex-1">
+              <h1 className="text-3xl md:text-4xl font-serif mb-3 tracking-tight">
+                {t("heroName")}
+              </h1>
+              <p className="text-muted-foreground leading-relaxed max-w-xl">
+                {t("heroIntro")}
+              </p>
+            </div>
+          </div>
+
+          {/* Simple navigation */}
+          <nav className="flex gap-6 text-sm">
+            <Link href="/posts" className="text-muted-foreground hover:text-foreground transition-colors">
+              {t("navWriting")}
+            </Link>
+            <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+              {t("navAbout")}
+            </Link>
+            <Link href="/search" className="text-muted-foreground hover:text-foreground transition-colors">
+              {t("navSearch")}
+            </Link>
+          </nav>
+        </header>
+
+        {/* Knowledge Areas / Categories */}
+        {categories.length > 0 && (
+          <section className="mb-20">
+            <h2 className="text-sm uppercase tracking-wider text-muted-foreground mb-6 font-mono">
+              {t("knowledgeAreas")}
+            </h2>
+            <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <Link
                   key={category.id}
                   href={`/categories/${category.slug}`}
-                  className="group"
+                  className="inline-flex items-baseline gap-2 px-3 py-1.5 text-sm border border-border/50 hover:border-border hover:bg-muted/30 transition-colors rounded"
                 >
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-full border bg-card hover:bg-accent transition-colors">
-                    <span className="font-medium">{category.title}</span>
-                    <span className="text-sm text-muted-foreground">
-                      ({category._count.documents})
-                    </span>
-                  </div>
+                  <span>{category.title}</span>
+                  <span className="text-xs text-muted-foreground font-mono">
+                    {category._count.documents}
+                  </span>
                 </Link>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
 
-      {/* Recent Posts Section */}
-      <section className="py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold">{t("recentPosts")}</h2>
-            <Link
-              href="/posts"
-              className="text-sm text-primary hover:underline"
-            >
-              {t("viewAll")} →
-            </Link>
-          </div>
+        {/* Recent Writing */}
+        <section className="mb-20">
+          <h2 className="text-sm uppercase tracking-wider text-muted-foreground mb-8 font-mono">
+            {t("recentWriting")}
+          </h2>
 
           {posts.length === 0 ? (
-            <p className="text-muted-foreground text-center py-12">
-              {tPosts("noPosts")}
+            <p className="text-muted-foreground italic">
+              {t("noPostsYet")}
             </p>
           ) : (
-            <div className="grid gap-6 md:grid-cols-2">
-              {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
+            <div className="space-y-12">
+              {posts.map((post, index) => (
+                <article key={post.id} className="group">
+                  <Link href={`/posts/${post.slug}`} className="block">
+                    {/* Date and category */}
+                    <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground font-mono">
+                      <time dateTime={post.publishedAt?.toISOString()}>
+                        {post.publishedAt?.toLocaleDateString('zh-CN', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                        }).replace(/\//g, '.')}
+                      </time>
+                      {post.category && (
+                        <>
+                          <span className="text-border">·</span>
+                          <span>{post.category.title}</span>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-xl md:text-2xl font-serif mb-3 group-hover:text-muted-foreground transition-colors leading-snug">
+                      {post.title}
+                    </h3>
+
+                    {/* Summary */}
+                    {post.summary && (
+                      <p className="text-muted-foreground leading-relaxed line-clamp-2">
+                        {post.summary}
+                      </p>
+                    )}
+
+                    {/* Tags */}
+                    {post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {post.tags.slice(0, 3).map((pt) => (
+                          <span
+                            key={pt.tag.id}
+                            className="text-xs text-muted-foreground font-mono"
+                          >
+                            #{pt.tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </Link>
+
+                  {/* Divider for all but last item */}
+                  {index < posts.length - 1 && (
+                    <hr className="mt-12 border-border/50" />
+                  )}
+                </article>
               ))}
             </div>
           )}
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-4">{t("ctaTitle")}</h2>
-          <p className="text-muted-foreground mb-6">
-            {t("ctaDescription")}
+          {/* View all link */}
+          {posts.length > 0 && (
+            <div className="mt-12 pt-8 border-t border-border/50">
+              <Link
+                href="/posts"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors font-mono"
+              >
+                {t("viewAllPosts")} →
+              </Link>
+            </div>
+          )}
+        </section>
+
+        {/* Footer note */}
+        <footer className="pt-12 border-t border-border/50">
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {t("footerNote")}
           </p>
-          <Link
-            href="/posts"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            {t("startReading")}
-          </Link>
-        </div>
-      </section>
+        </footer>
+      </div>
     </div>
   )
 }
