@@ -140,6 +140,10 @@
     "recentThinking": "Recent Thinking",
     "noPostsYet": "No content yet",
     "exploreGarden": "Explore the garden",
+    "notesLabel": "notes",
+    "allNotes": "all notes",
+    "topicsLabel": "topics",
+    "threadsLabel": "threads",
     "categoryDescDefault": "Explore ideas and notes in this area",
     "categoryDesc": {
       "分享": "Technical sharing, tool recommendations, and practical experience",

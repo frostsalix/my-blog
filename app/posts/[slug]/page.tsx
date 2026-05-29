@@ -1,4 +1,5 @@
 import { Suspense } from "react"
+import Link from "next/link"
 import { getPostBySlug } from "@/lib/queries"
 import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -54,86 +55,74 @@ export default async function PostPage({
   const tags = post.tags.map((pt) => pt.tag)
 
   return (
-    <article className="min-h-screen">
-      {/* Subtle atmospheric background */}
-      <div className="fixed inset-0 -z-10">
-        <div
-          className="absolute inset-0 bg-[linear-gradient(to_right,#80808004_1px,transparent_1px),linear-gradient(to_bottom,#80808004_1px,transparent_1px)] bg-[size:64px_64px]"
-          style={{
-            maskImage: 'linear-gradient(to bottom, black 30%, transparent 95%)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 95%)'
-          }}
-        />
-      </div>
-
-      {/* Article header - spacious and editorial */}
-      <header className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16 md:pb-20">
-        {/* Metadata - subtle and refined */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8 text-xs text-muted-foreground/60 font-mono">
+    <article>
+      {/* Article header — restrained, part of the system */}
+      <header className="mx-auto max-w-2xl px-5 sm:px-6 pt-14 sm:pt-16 pb-8">
+        <div className="mb-5 flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground/45">
           <time dateTime={post.publishedAt?.toISOString()}>
             {post.publishedAt ? formatDateLong(post.publishedAt) : t("draft")}
           </time>
           {post.category && (
             <>
               <span className="text-border/60">·</span>
-              <span className="text-muted-foreground/70">{post.category.title}</span>
+              <Link
+                href={`/categories/${post.category.slug}`}
+                className="hover:text-foreground transition-colors"
+              >
+                {post.category.title}
+              </Link>
             </>
           )}
+          <span className="text-border/60">·</span>
+          <span>{post.author.name}</span>
         </div>
 
-        {/* Title - large and impactful */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif mb-6 sm:mb-8 tracking-tight leading-[1.1] text-balance">
+        <h1 className="font-serif text-2xl sm:text-3xl font-medium leading-snug tracking-tight text-balance">
           {post.title}
         </h1>
 
-        {/* Summary - editorial lead */}
         {post.summary && (
-          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground/80 leading-relaxed mb-8 sm:mb-10 font-serif">
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground/80">
             {post.summary}
           </p>
         )}
 
-        {/* Tags - minimal styling */}
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
+          <div className="mt-5 flex flex-wrap gap-x-3 gap-y-1.5">
             {tags.map((tag) => (
-              <span
+              <Link
                 key={tag.id}
-                className="text-xs text-muted-foreground/60 font-mono"
+                href={`/tags/${tag.slug}`}
+                className="font-mono text-xs text-muted-foreground/45 hover:text-foreground transition-colors"
               >
                 #{tag.name}
-              </span>
+              </Link>
             ))}
           </div>
         )}
-
-        {/* Author - understated */}
-        <div className="text-sm text-muted-foreground/60 font-mono pt-6 border-t border-border/20">
-          {post.author.name}
-        </div>
       </header>
 
-      {/* Article content - optimal reading experience */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20 md:pb-24">
+      {/* Article content — optimal reading experience */}
+      <div className="mx-auto max-w-2xl px-5 sm:px-6 pt-4 pb-16 border-t border-border/40">
         {post.content && <MarkdownRenderer content={post.content} />}
       </div>
 
       {/* Backlinks - knowledge connections */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+      <div className="mx-auto max-w-2xl px-5 sm:px-6 pb-10">
         <Suspense>
           <Backlinks postId={post.id} />
         </Suspense>
       </div>
 
       {/* Related Notes - shared topics */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+      <div className="mx-auto max-w-2xl px-5 sm:px-6 pb-10">
         <Suspense>
           <RelatedNotes postId={post.id} tags={tags} categoryId={post.categoryId} />
         </Suspense>
       </div>
 
       {/* Comments - separated section */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20 md:pb-24">
+      <div className="mx-auto max-w-2xl px-5 sm:px-6 pb-16 sm:pb-20">
         <Suspense>
           <CommentSection postId={post.id} />
         </Suspense>

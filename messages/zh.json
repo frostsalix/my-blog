@@ -142,6 +142,10 @@
     "recentThinking": "近期思考",
     "noPostsYet": "还没有内容",
     "exploreGarden": "探索花园",
+    "notesLabel": "笔记",
+    "allNotes": "全部笔记",
+    "topicsLabel": "主题",
+    "threadsLabel": "线索",
     "categoryDescDefault": "探索这个领域的想法和笔记",
     "categoryDesc": {
       "分享": "技术分享、工具推荐和实践经验",
