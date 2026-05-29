@@ -142,6 +142,8 @@
     "exploreGarden": "Explore the garden",
     "notesLabel": "notes",
     "allNotes": "all notes",
+    "tendedLabel": "recently tended",
+    "tendedMark": "tended",
     "topicsLabel": "topics",
     "threadsLabel": "threads",
     "categoryDescDefault": "Explore ideas and notes in this area",
