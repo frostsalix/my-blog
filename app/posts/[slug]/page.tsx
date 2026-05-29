@@ -55,35 +55,83 @@ export default async function PostPage({
   const tags = post.tags.map((pt) => pt.tag)
 
   return (
-    <article className="max-w-2xl mx-auto px-4 py-8">
-      <header className="mb-8 space-y-4">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+    <article className="min-h-screen">
+      {/* Subtle atmospheric background */}
+      <div className="fixed inset-0 -z-10">
+        <div
+          className="absolute inset-0 bg-[linear-gradient(to_right,#80808004_1px,transparent_1px),linear-gradient(to_bottom,#80808004_1px,transparent_1px)] bg-[size:64px_64px]"
+          style={{
+            maskImage: 'linear-gradient(to bottom, black 30%, transparent 95%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 95%)'
+          }}
+        />
+      </div>
+
+      {/* Article header - spacious and editorial */}
+      <header className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16 md:pb-20">
+        {/* Metadata - subtle and refined */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8 text-xs text-muted-foreground/60 font-mono">
           <time dateTime={post.publishedAt?.toISOString()}>
             {post.publishedAt ? formatDateLong(post.publishedAt) : t("draft")}
           </time>
           {post.category && (
-            <CategoryBadge name={post.category.title} slug={post.category.slug} />
+            <>
+              <span className="text-border/60">·</span>
+              <span className="text-muted-foreground/70">{post.category.title}</span>
+            </>
           )}
         </div>
-        <h1 className="text-3xl font-bold">{post.title}</h1>
+
+        {/* Title - large and impactful */}
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif mb-6 sm:mb-8 tracking-tight leading-[1.1] text-balance">
+          {post.title}
+        </h1>
+
+        {/* Summary - editorial lead */}
         {post.summary && (
-          <p className="text-lg text-muted-foreground">{post.summary}</p>
+          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground/80 leading-relaxed mb-8 sm:mb-10 font-serif">
+            {post.summary}
+          </p>
         )}
-        {tags.length > 0 && <TagList tags={tags} />}
-        <div className="text-sm text-muted-foreground">
-          {t("by")} {post.author.name}
+
+        {/* Tags - minimal styling */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
+            {tags.map((tag) => (
+              <span
+                key={tag.id}
+                className="text-xs text-muted-foreground/60 font-mono"
+              >
+                #{tag.name}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Author - understated */}
+        <div className="text-sm text-muted-foreground/60 font-mono pt-6 border-t border-border/20">
+          {post.author.name}
         </div>
       </header>
 
-      {post.content && <MarkdownRenderer content={post.content} />}
+      {/* Article content - optimal reading experience */}
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20 md:pb-24">
+        {post.content && <MarkdownRenderer content={post.content} />}
+      </div>
 
-      <Suspense>
-        <Backlinks postId={post.id} />
-      </Suspense>
+      {/* Backlinks - knowledge connections */}
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+        <Suspense>
+          <Backlinks postId={post.id} />
+        </Suspense>
+      </div>
 
-      <Suspense>
-        <CommentSection postId={post.id} />
-      </Suspense>
+      {/* Comments - separated section */}
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20 md:pb-24">
+        <Suspense>
+          <CommentSection postId={post.id} />
+        </Suspense>
+      </div>
     </article>
   )
 }
