@@ -3,10 +3,9 @@ import { getPostBySlug } from "@/lib/queries"
 import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { MarkdownRenderer } from "@/components/blog/MarkdownRenderer"
-import { CategoryBadge } from "@/components/blog/CategoryBadge"
-import { TagList } from "@/components/blog/TagBadge"
 import { CommentSection } from "@/components/blog/CommentSection"
 import { Backlinks } from "@/components/blog/Backlinks"
+import { RelatedNotes } from "@/components/blog/RelatedNotes"
 import { formatDateLong } from "@/lib/utils"
 import type { Metadata } from "next"
 
@@ -123,6 +122,13 @@ export default async function PostPage({
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
         <Suspense>
           <Backlinks postId={post.id} />
+        </Suspense>
+      </div>
+
+      {/* Related Notes - shared topics */}
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+        <Suspense>
+          <RelatedNotes postId={post.id} tags={tags} categoryId={post.categoryId} />
         </Suspense>
       </div>
 
