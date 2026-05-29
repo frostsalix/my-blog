@@ -33,3 +33,15 @@ const fallback = {
 } as const;
 
 export const env: z.infer<typeof envSchema> = result.success ? result.data : fallback;
+
+if (env.NODE_ENV === "production") {
+  const fatal: string[] = [];
+  if (!env.DATABASE_URL) fatal.push("DATABASE_URL");
+  if (!env.AUTH_SECRET || env.AUTH_SECRET.length < 32) fatal.push("AUTH_SECRET (min 32 chars)");
+  if (fatal.length > 0) {
+    throw new Error(
+      `[env] Missing required production env vars: ${fatal.join(", ")}. ` +
+      `Set them in your deployment environment and redeploy.`
+    );
+  }
+}

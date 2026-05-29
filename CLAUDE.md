@@ -13,8 +13,12 @@ npm run dev      # Start dev server (http://localhost:3000)
 npm run build    # Production build
 npm run start    # Start production server
 npm run lint     # ESLint 9 flat config
+npm run test     # Jest unit/component tests (jsdom + Testing Library), in __tests__/
+npm run test:e2e # Playwright end-to-end tests, in e2e/
 npm run seed     # Seed admin user (prisma/seed.ts via tsx)
 ```
+
+Run a single Jest test: `npm run test -- __tests__/lib/slug.test.ts` (or `-t "<test name>"` to filter by name).
 
 Prisma (Prisma 7):
 ```bash
@@ -48,10 +52,27 @@ npx prisma generate       # Runs automatically via `postinstall`
 
 Pages **do not call Prisma directly**. All read queries live in `lib/queries.ts` and reuse a shared `POST_INCLUDES` constant. Types are derived via `Prisma.PostGetPayload<{ include: typeof POST_INCLUDES }>` — never hand-write post/comment types.
 
+### Mutations: Server Actions (not API routes)
+
+All mutations are **Server Actions** in `app/actions/` (migrated from API routes in commit `80b312f`). There are exactly three files, each marked `"use server"`:
+
+- `posts.ts` — `createPost`, `updatePost`, `deletePost`
+- `comments.ts` — `createComment` (public; used by the post page comment form)
+- `admin.ts` — `createCategory`/`deleteCategory`, `createTag`/`deleteTag`, `approveComment`/`deleteComment`
+
+Two coexisting patterns — match the one already used by the file you're editing:
+
+1. **Result-returning** (`posts.ts`, `comments.ts`): action returns `ActionResult` (`{ success: true } | { success: false; error }`), surfacing `result.error.issues[0].message` on Zod failure. Called **imperatively** from client components that build a `FormData` and handle the result — `PostForm.tsx` (create/update), `DeletePostButton.tsx` (delete), `CommentForm.tsx` (create comment).
+2. **Fire-and-forget** (`admin.ts`): action returns `void`, silently `return`s on validation failure, and is wired via `<form action={fn}>` in server components (`app/admin/categories`, `app/admin/tags`, `app/admin/comments`).
+
+Auth guard: each file defines its own local `requireAdmin()` that calls `await auth()` and throws `"Unauthorized"` (`posts.ts` checks `role === "admin"` **and** `user.id`; `admin.ts` checks role only). `createComment` calls `auth()` but allows anonymous comments. Every action calls `revalidatePath(...)` after mutating.
+
+**Auth is not a Server Action** — sign-in/sign-out use `next-auth/react` directly in client components (`login/page.tsx`, `CommentForm.tsx`, `AdminLayoutClient.tsx`).
+
 ### Validation boundaries
 
 - **Env**: `lib/env.ts` validates `process.env` with Zod at import time. It warns + falls back rather than throwing, so failures are visible but non-fatal.
-- **API input**: `lib/validations.ts` exports Zod schemas (`createPostSchema`, `createCommentSchema`, etc). API routes use `schema.safeParse()` and return 400 with `error.flatten()` on failure.
+- **Mutation input**: `lib/validations.ts` exports Zod schemas (`createPostSchema`, `createCommentSchema`, `createCategorySchema`, `createTagSchema`). Server Actions `safeParse()` the `FormData` before touching Prisma.
 
 ### Auth (Auth.js v5)
 
@@ -82,7 +103,7 @@ Most public pages (categories, tags, search, homepage) declare `export const dyn
 - Public: `/`, `/posts/[slug]`, `/categories/[slug]`, `/tags/[slug]`, `/search`, `/about`, `/sitemap.xml`
 - Admin (guarded by `AdminLayout`): `/admin`, `/admin/posts`, `/admin/posts/new`, `/admin/posts/[id]/edit`, `/admin/categories`, `/admin/tags`, `/admin/comments`
 - Auth: `/login` (independent layout), `/api/auth/[...nextauth]`
-- API: `/api/posts`, `/api/comments`, `/api/search`, `/api/graph`
+- API (reads only): `/api/search`, `/api/graph`. **All mutations are Server Actions** (`app/actions/`), not API routes.
 - **No RSS feed** — `app/rss.xml/` was removed in `f2390b4`. Sitemap (`app/sitemap.ts`) is retained.
 
 ### shadcn/ui
@@ -101,7 +122,7 @@ Wiki-link syntax (`[[target|alias]]`) is supported. The regex and `extractWikiLi
 
 ## Conventions
 
-- New API routes: validate input with the Zod schemas in `lib/validations.ts` (don't trust the JSON body).
+- New mutations: add a Server Action in `app/actions/`, guard with `await auth()`, validate with the Zod schemas in `lib/validations.ts`, and `revalidatePath()` affected routes — don't add new API route handlers for writes.
 - New data reads: add to `lib/queries.ts`, don't call Prisma from pages/components.
 - New admin pages: rely on the layout's `auth()` guard — don't re-check auth in the page.
 - New strings shown in UI: add keys to **both** `messages/en.json` and `messages/zh.json`.
