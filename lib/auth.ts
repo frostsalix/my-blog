@@ -7,6 +7,7 @@ import { env } from "@/lib/env"
 import bcrypt from "bcryptjs"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  secret: env.AUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
