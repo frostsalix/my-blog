@@ -132,15 +132,22 @@
     "tagline": "记录想法，分享知识",
     "recentPosts": "最新文章",
     "heroName": "Sayliks",
-    "heroIntro": "开发者，写作者。在这里记录技术探索、思考笔记和日常观察。这是我的数字花园，一个持续生长的知识空间。",
+    "heroIntro": "开发者，写作者。在这里记录技术探索、思考笔记和日常观察。",
+    "currentlyExploring": "当前正在探索：大语言模型、知识管理系统、以及如何构建更好的思考工具。",
     "navWriting": "写作",
     "navAbout": "关于",
     "navSearch": "搜索",
     "knowledgeAreas": "知识领域",
-    "recentWriting": "近期写作",
+    "featuredWriting": "精选文章",
     "noPostsYet": "还没有文章",
-    "viewAllPosts": "查看所有文章",
-    "footerNote": "这个网站是我的数字花园 — 一个思考、学习和创作的空间。内容会持续更新和演化。"
+    "viewAllWriting": "查看所有文章",
+    "categoryDescDefault": "探索这个领域的想法和笔记",
+    "categoryDesc": {
+      "分享": "技术分享、工具推荐和实践经验",
+      "随笔": "日常思考、观察和随想",
+      "说说": "简短的想法和碎片化思考"
+    },
+    "footerNote": "这是我的数字花园 — 一个思考、学习和创作的空间。内容会持续更新和演化。"
   },
   "graph": {
     "backlinks": "反向链接",

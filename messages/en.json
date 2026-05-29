@@ -130,15 +130,22 @@
     "tagline": "Recording thoughts, sharing knowledge",
     "recentPosts": "Recent Posts",
     "heroName": "Sayliks",
-    "heroIntro": "Developer and writer. I document technical explorations, thinking notes, and daily observations here. This is my digital garden — a continuously growing knowledge space.",
+    "heroIntro": "Developer and writer. I document technical explorations, thinking notes, and daily observations here.",
+    "currentlyExploring": "Currently exploring: large language models, knowledge management systems, and how to build better thinking tools.",
     "navWriting": "Writing",
     "navAbout": "About",
     "navSearch": "Search",
     "knowledgeAreas": "Knowledge Areas",
-    "recentWriting": "Recent Writing",
+    "featuredWriting": "Featured Writing",
     "noPostsYet": "No posts yet",
-    "viewAllPosts": "View all posts",
-    "footerNote": "This site is my digital garden — a space for thinking, learning, and creating. Content evolves continuously."
+    "viewAllWriting": "View all writing",
+    "categoryDescDefault": "Explore ideas and notes in this area",
+    "categoryDesc": {
+      "分享": "Technical sharing, tool recommendations, and practical experience",
+      "随笔": "Daily thoughts, observations, and reflections",
+      "说说": "Short thoughts and fragmented thinking"
+    },
+    "footerNote": "This is my digital garden — a space for thinking, learning, and creating. Content evolves continuously."
   },
   "graph": {
     "backlinks": "Backlinks",
