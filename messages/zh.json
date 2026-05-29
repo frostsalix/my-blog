@@ -130,7 +130,16 @@
   "home": {
     "siteTitle": "sayliks's blog",
     "tagline": "记录想法，分享知识",
-    "recentPosts": "最新文章"
+    "recentPosts": "最新文章",
+    "heroTitle": "欢迎来到我的博客",
+    "heroSubtitle": "记录想法，分享知识，探索技术",
+    "explorePosts": "浏览文章",
+    "aboutMe": "关于我",
+    "categories": "分类",
+    "viewAll": "查看全部",
+    "ctaTitle": "开始探索",
+    "ctaDescription": "发现更多有趣的文章和想法",
+    "startReading": "开始阅读"
   },
   "graph": {
     "backlinks": "反向链接",

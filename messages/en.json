@@ -128,7 +128,16 @@
   "home": {
     "siteTitle": "sayliks's blog",
     "tagline": "Recording thoughts, sharing knowledge",
-    "recentPosts": "Recent Posts"
+    "recentPosts": "Recent Posts",
+    "heroTitle": "Welcome to My Blog",
+    "heroSubtitle": "Recording thoughts, sharing knowledge, exploring technology",
+    "explorePosts": "Explore Posts",
+    "aboutMe": "About Me",
+    "categories": "Categories",
+    "viewAll": "View All",
+    "ctaTitle": "Start Exploring",
+    "ctaDescription": "Discover more interesting articles and ideas",
+    "startReading": "Start Reading"
   },
   "graph": {
     "backlinks": "Backlinks",
