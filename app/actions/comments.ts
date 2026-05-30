@@ -6,8 +6,6 @@ import { createCommentSchema } from "@/lib/validations"
 import { moderateComment } from "@/lib/moderation"
 import { revalidatePath } from "next/cache"
 
-export const runtime = "nodejs"
-
 export type ActionResult<T = void> =
   | { success: true; data?: T }
   | { success: false; error: string }
