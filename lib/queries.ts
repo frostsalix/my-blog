@@ -46,35 +46,6 @@ export async function getPublishedPosts(params: {
   return { posts, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
 }
 
-// A note counts as "tended" when it was revisited on a later day, not merely
-// polished right after publishing. publishedAt is frozen at first publish;
-// updatedAt bumps on every save, so a gap of a full day means the note was
-// genuinely come back to. (A 1-2h gap is just finishing the initial edit.)
-const TENDED_THRESHOLD_MS = 24 * 60 * 60 * 1000; // 1 day
-
-export async function getRecentlyTended(limit = 6) {
-  // Pull a bounded window of recently-saved published notes, then keep only
-  // the ones with a meaningful publish→edit gap. Derivation-only, no schema.
-  const candidates = await prisma.document.findMany({
-    where: {
-      type: "POST",
-      published: true,
-      publishedAt: { lte: new Date() },
-    },
-    include: DOCUMENT_INCLUDES,
-    orderBy: { updatedAt: "desc" },
-    take: limit * 4,
-  });
-
-  return candidates
-    .filter(
-      (p) =>
-        p.publishedAt != null &&
-        p.updatedAt.getTime() - p.publishedAt.getTime() > TENDED_THRESHOLD_MS
-    )
-    .slice(0, limit);
-}
-
 export async function getPostBySlug(slug: string) {
   return prisma.document.findUnique({
     where: { slug, type: "POST" },
@@ -200,5 +171,77 @@ export async function getRecentPosts(limit = 5) {
     orderBy: { updatedAt: "desc" },
     take: limit,
     select: { id: true, title: true, published: true, updatedAt: true },
+  });
+}
+
+export async function getRelatedPosts(params: {
+  postId: string;
+  tagIds?: string[];
+  categoryId?: string | null;
+  limit?: number;
+}) {
+  const { postId, tagIds = [], categoryId, limit = 3 } = params;
+
+  return prisma.document.findMany({
+    where: {
+      type: "POST",
+      published: true,
+      id: { not: postId },
+      OR: [
+        ...(tagIds.length
+          ? [
+              {
+                tags: {
+                  some: {
+                    tagId: { in: tagIds },
+                  },
+                },
+              },
+            ]
+          : []),
+        ...(categoryId
+          ? [
+              {
+                categoryId,
+              },
+            ]
+          : []),
+      ],
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      summary: true,
+      tags: { include: { tag: true } },
+    },
+    take: limit,
+    orderBy: { publishedAt: "desc" },
+  }).catch(() => []);
+}
+
+export async function getSitemapEntries() {
+  const [posts, categories, tags] = await Promise.all([
+    prisma.document.findMany({
+      where: { type: "POST", published: true, publishedAt: { lte: new Date() } },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.document.findMany({ where: { type: "CATEGORY" }, select: { slug: true, updatedAt: true } }),
+    prisma.tag.findMany({ select: { slug: true, updatedAt: true } }),
+  ]);
+
+  return { posts, categories, tags };
+}
+
+export async function getGraphPosts() {
+  return prisma.document.findMany({
+    where: { type: "POST", published: true, publishedAt: { lte: new Date() } },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      content: true,
+      category: { select: { title: true } },
+    },
   });
 }
