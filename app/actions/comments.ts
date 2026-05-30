@@ -6,6 +6,8 @@ import { createCommentSchema } from "@/lib/validations"
 import { moderateComment } from "@/lib/moderation"
 import { revalidatePath } from "next/cache"
 
+export const runtime = "nodejs"
+
 export type ActionResult<T = void> =
   | { success: true; data?: T }
   | { success: false; error: string }
@@ -56,7 +58,7 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
     }
 
     // Advisory moderation — never throws; null/failure -> flag-for-review.
-    const outcome = await moderateComment(content, accountAgeDays)
+    const outcome = await moderateComment(content, accountAgeDays, userId)
 
     await prisma.comment.create({
       data: {
