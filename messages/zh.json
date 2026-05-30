@@ -218,6 +218,16 @@
     "loading": "加载图谱中...",
     "empty": "还没有互相连接的笔记。",
     "loadError": "加载图谱失败",
+    "searchLabel": "搜索图谱",
+    "searchPlaceholder": "查找笔记...",
+    "allGroups": "全部",
+    "details": "当前选择",
+    "selectHint": "选择一个节点以固定它，并查看附近的笔记。",
+    "clearSelection": "清除选择",
+    "openNote": "打开笔记",
+    "connectedNodes": "{count} 篇相关笔记",
+    "noConnections": "没有直接连接。",
+    "linkCount": "{count} 条连接",
     "stats": "{nodes} 个节点 · {links} 条连接"
   },
   "auth": {

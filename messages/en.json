@@ -216,6 +216,16 @@
     "loading": "Loading graph...",
     "empty": "No linked notes yet.",
     "loadError": "Failed to load graph",
+    "searchLabel": "Search graph",
+    "searchPlaceholder": "Find a note...",
+    "allGroups": "all",
+    "details": "selection",
+    "selectHint": "Select a node to pin it and inspect nearby notes.",
+    "clearSelection": "Clear selection",
+    "openNote": "open note",
+    "connectedNodes": "{count} linked notes",
+    "noConnections": "No direct links.",
+    "linkCount": "{count} links",
     "stats": "{nodes} nodes · {links} links"
   },
   "auth": {

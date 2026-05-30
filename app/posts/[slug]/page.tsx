@@ -56,16 +56,15 @@ export default async function PostPage({
   const tags = post.tags.map((pt) => pt.tag)
 
   return (
-    <article>
-      {/* Article header — restrained, part of the system */}
-      <header className="mx-auto max-w-2xl px-5 sm:px-6 pt-14 sm:pt-16 pb-8">
-        <div className="mb-5 flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground/45">
+    <article className="relative">
+      <header className="mx-auto max-w-[760px] px-5 pb-12 pt-16 sm:px-6 sm:pb-14 sm:pt-24">
+        <div className="mb-7 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase text-muted-foreground/55">
           <time dateTime={post.publishedAt?.toISOString()}>
             {post.publishedAt ? formatDateLong(post.publishedAt) : t("draft")}
           </time>
           {isPostRevisited(post) && (
             <>
-              <span className="text-border/60">·</span>
+              <span className="text-border/50">/</span>
               <time dateTime={post.updatedAt.toISOString()}>
                 {t("updated")} {formatDateLong(post.updatedAt)}
               </time>
@@ -73,36 +72,36 @@ export default async function PostPage({
           )}
           {post.category && (
             <>
-              <span className="text-border/60">·</span>
+              <span className="text-border/50">/</span>
               <Link
                 href={`/categories/${post.category.slug}`}
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground/80"
               >
                 {post.category.title}
               </Link>
             </>
           )}
-          <span className="text-border/60">·</span>
+          <span className="text-border/50">/</span>
           <span>{post.author.name}</span>
         </div>
 
-        <h1 className="font-serif text-2xl sm:text-3xl font-medium leading-snug tracking-tight text-balance">
+        <h1 className="max-w-[720px] text-balance font-serif text-[2.25rem] font-medium leading-[1.18] text-foreground/95 sm:text-[3.6rem] sm:leading-[1.12]">
           {post.title}
         </h1>
 
         {post.summary && (
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground/80">
+          <p className="mt-7 max-w-[680px] font-serif text-lg leading-[1.85] text-muted-foreground/75 sm:text-xl">
             {post.summary}
           </p>
         )}
 
         {tags.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-x-3 gap-y-1.5">
+          <div className="mt-7 flex flex-wrap gap-x-4 gap-y-2">
             {tags.map((tag) => (
               <Link
                 key={tag.id}
                 href={`/tags/${tag.slug}`}
-                className="font-mono text-xs text-muted-foreground/45 hover:text-foreground transition-colors"
+                className="font-mono text-[11px] lowercase text-muted-foreground/45 transition-colors hover:text-foreground/75"
               >
                 #{tag.name}
               </Link>
@@ -111,27 +110,24 @@ export default async function PostPage({
         )}
       </header>
 
-      {/* Article content — optimal reading experience */}
-      <div className="mx-auto max-w-2xl px-5 sm:px-6 pt-4 pb-16 border-t border-border/40">
+      <div className="mx-auto max-w-[760px] px-5 pb-16 sm:px-6">
+        <div className="mb-12 h-px bg-gradient-to-r from-transparent via-border/45 to-transparent" />
         {post.content && <MarkdownRenderer content={post.content} />}
       </div>
 
-      {/* Backlinks - knowledge connections */}
-      <div className="mx-auto max-w-2xl px-5 sm:px-6 pb-10">
+      <div className="mx-auto max-w-[760px] px-5 pb-10 sm:px-6">
         <Suspense>
           <Backlinks postId={post.id} />
         </Suspense>
       </div>
 
-      {/* Related Notes - shared topics */}
-      <div className="mx-auto max-w-2xl px-5 sm:px-6 pb-10">
+      <div className="mx-auto max-w-[760px] px-5 pb-10 sm:px-6">
         <Suspense>
           <RelatedNotes postId={post.id} tags={tags} categoryId={post.categoryId} />
         </Suspense>
       </div>
 
-      {/* Comments - separated section */}
-      <div className="mx-auto max-w-2xl px-5 sm:px-6 pb-16 sm:pb-20">
+      <div className="mx-auto max-w-[760px] px-5 pb-16 sm:px-6 sm:pb-20">
         <Suspense>
           <CommentSection postId={post.id} />
         </Suspense>
