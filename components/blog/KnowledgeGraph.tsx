@@ -172,15 +172,18 @@ export function KnowledgeGraph() {
 
     const observer = new ResizeObserver(([entry]) => {
       if (!entry) return
+      const width = Math.max(320, Math.floor(entry.contentRect.width))
+      const minHeight = width < 640 ? 440 : 520
+
       setDimensions({
-        height: Math.max(520, Math.floor(entry.contentRect.height)),
-        width: Math.max(320, Math.floor(entry.contentRect.width)),
+        height: Math.max(minHeight, Math.floor(entry.contentRect.height)),
+        width,
       })
     })
 
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [])
+  }, [data])
 
   const groups = useMemo(() => {
     if (!data) return []
@@ -463,8 +466,20 @@ export function KnowledgeGraph() {
     zoomRef.current = zoom
     svg.call(zoom)
 
+    const compact = dimensions.width < 640
     const centerX = dimensions.width / 2
-    const centerY = dimensions.height / 2
+    const centerY = compact
+      ? Math.max(180, dimensions.height * 0.32)
+      : Math.max(210, dimensions.height * 0.31)
+    const compactBounds = {
+      bottom: dimensions.height - 92,
+      left: 78,
+      right: dimensions.width - 78,
+      top: 124,
+    }
+    const clampToCanvas = (value: number | undefined, min: number, max: number, fallback: number) =>
+      Math.min(max, Math.max(min, value ?? fallback))
+
     const simulation = d3
       .forceSimulation<GraphNode>(graph.nodes)
       .force(
@@ -476,22 +491,37 @@ export function KnowledgeGraph() {
             const source = typeof link.source === "string" ? null : link.source
             const target = typeof link.target === "string" ? null : link.target
             const importance = Math.max(source?.val ?? 0, target?.val ?? 0)
+            if (compact) return Math.max(58, 104 - importance * 6)
             return Math.max(96, 150 - importance * 7)
           })
-          .strength(0.14)
+          .strength(compact ? 0.2 : 0.14)
       )
       .force(
         "charge",
-        d3.forceManyBody<GraphNode>().strength((node) => -122 - Math.min(node.val, 8) * 15)
+        d3
+          .forceManyBody<GraphNode>()
+          .strength((node) =>
+            compact ? -62 - Math.min(node.val, 8) * 8 : -122 - Math.min(node.val, 8) * 15
+          )
       )
-      .force("collide", d3.forceCollide<GraphNode>().radius((node) => getNodeRadius(node) + 16))
-      .force("center", d3.forceCenter(centerX, centerY).strength(0.34))
-      .force("x", d3.forceX<GraphNode>(centerX).strength(0.014))
-      .force("y", d3.forceY<GraphNode>(centerY).strength(0.014))
+      .force(
+        "collide",
+        d3.forceCollide<GraphNode>().radius((node) => getNodeRadius(node) + (compact ? 10 : 16))
+      )
+      .force("center", d3.forceCenter(centerX, centerY).strength(compact ? 0.54 : 0.42))
+      .force("x", d3.forceX<GraphNode>(centerX).strength(compact ? 0.06 : 0.026))
+      .force("y", d3.forceY<GraphNode>(centerY).strength(compact ? 0.058 : 0.024))
       .alpha(0.92)
       .alphaDecay(0.04)
       .velocityDecay(0.46)
       .on("tick", () => {
+        if (compact) {
+          for (const node of graph.nodes) {
+            node.x = clampToCanvas(node.x, compactBounds.left, compactBounds.right, centerX)
+            node.y = clampToCanvas(node.y, compactBounds.top, compactBounds.bottom, centerY)
+          }
+        }
+
         links
           .attr("x1", (link) => (link.source as GraphNode).x ?? centerX)
           .attr("y1", (link) => (link.source as GraphNode).y ?? centerY)
@@ -577,8 +607,7 @@ export function KnowledgeGraph() {
 
   return (
     <section
-      ref={containerRef}
-      className="relative h-[74vh] min-h-[640px] w-full overflow-hidden shadow-[0_44px_120px_rgba(0,0,0,0.34)]"
+      className="relative flex h-[74vh] min-h-[600px] w-full flex-col overflow-hidden shadow-[0_44px_120px_rgba(0,0,0,0.34)] sm:min-h-[640px]"
       style={{ background: NEBULA_BACKGROUND }}
     >
       <div className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] [background-size:52px_52px]" />
@@ -586,13 +615,7 @@ export function KnowledgeGraph() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.12)_46%,rgba(0,0,0,0.48)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
 
-      <svg ref={svgRef} className="absolute inset-0 h-full w-full touch-none" role="img">
-        <defs />
-        <rect width="100%" height="100%" fill="transparent" />
-        <g ref={viewportRef} />
-      </svg>
-
-      <div className="absolute left-5 top-5 flex max-w-[calc(100%-2.5rem)] flex-wrap items-center gap-2">
+      <div className="relative z-10 flex max-w-[calc(100%-2.5rem)] flex-wrap items-center gap-2 px-5 pb-2 pt-5">
         <label className="sr-only" htmlFor="graph-search">
           {t("searchLabel")}
         </label>
@@ -612,118 +635,126 @@ export function KnowledgeGraph() {
         </button>
       </div>
 
-      <div className="absolute bottom-5 left-5 flex max-w-[calc(100%-2.5rem)] flex-wrap gap-x-4 gap-y-2">
-        {groups.map((group) => {
-          const active = activeGroups.has(group)
-          return (
-            <button
-              key={group}
-              type="button"
-              onClick={() => toggleGroup(group)}
-              className="inline-flex h-7 items-center gap-2 rounded-full border border-transparent bg-transparent px-0 font-mono text-[10px] lowercase tracking-[0.12em] text-slate-600 transition hover:text-slate-400"
-              style={{ opacity: active ? 0.78 : 0.24 }}
-            >
-              <span
-                className="h-1.5 w-1.5 rounded-full"
-                style={{
-                  backgroundColor: getNodeTone(group),
-                  boxShadow: active ? `0 0 8px ${getNodeTone(group)}` : "none",
-                  opacity: active ? 0.9 : 0.45,
-                }}
-              />
-              {group}
-            </button>
-          )
-        })}
-      </div>
+      <div ref={containerRef} className="relative min-h-0 flex-1 overflow-hidden">
+        <svg ref={svgRef} className="absolute inset-0 h-full w-full touch-none" role="img">
+          <defs />
+          <rect width="100%" height="100%" fill="transparent" />
+          <g ref={viewportRef} />
+        </svg>
 
-      <div className="absolute bottom-5 right-5 font-mono text-[10px] text-slate-600">
-        {t("stats", { links: graph?.links.length ?? 0, nodes: graph?.nodes.length ?? 0 })}
-      </div>
-
-      {tooltip && (
-        <div
-          className="pointer-events-none absolute z-20 min-w-36 rounded-md border border-white/[0.045] bg-[#0b1020]/42 px-2.5 py-1.5 text-xs text-slate-500 shadow-lg shadow-black/20 backdrop-blur-2xl"
-          style={{
-            left: Math.min(tooltip.x + 14, dimensions.width - 210),
-            top: Math.min(tooltip.y + 14, dimensions.height - 92),
-          }}
-        >
-          <div className="text-xs text-slate-300">{tooltip.title}</div>
-          <div className="mt-1 font-mono text-[10px] text-slate-600">
-            {tooltip.group} · {t("linkCount", { count: tooltip.links })}
-          </div>
-        </div>
-      )}
-
-      <aside
-        className="absolute right-5 top-5 w-72 rounded-md border border-white/[0.065] bg-[#080d18]/45 p-4 text-slate-400 shadow-2xl shadow-black/25 backdrop-blur-2xl transition"
-        style={{ opacity: selectedNode ? 0.96 : 0.58 }}
-      >
-        {selectedNode ? (
-          <>
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="font-mono text-[10px] lowercase tracking-[0.16em] text-slate-600">
-                  {selectedNode.group}
-                </p>
-                <h2 className="mt-1 text-base leading-snug text-slate-200">{selectedNode.title}</h2>
-              </div>
+        <div className="absolute bottom-5 left-5 flex max-w-[calc(100%-2.5rem)] flex-wrap gap-x-4 gap-y-2">
+          {groups.map((group) => {
+            const active = activeGroups.has(group)
+            return (
               <button
+                key={group}
                 type="button"
-                onClick={() => setSelectedId(null)}
-                className="font-mono text-xs text-slate-600 transition hover:text-slate-300"
-                aria-label={t("clearSelection")}
+                onClick={() => toggleGroup(group)}
+                className="inline-flex h-7 items-center gap-2 rounded-full border border-transparent bg-transparent px-0 font-mono text-[10px] lowercase tracking-[0.12em] text-slate-600 transition hover:text-slate-400"
+                style={{ opacity: active ? 0.78 : 0.24 }}
               >
-                ×
+                <span
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{
+                    backgroundColor: getNodeTone(group),
+                    boxShadow: active ? `0 0 8px ${getNodeTone(group)}` : "none",
+                    opacity: active ? 0.9 : 0.45,
+                  }}
+                />
+                {group}
               </button>
-            </div>
+            )
+          })}
+        </div>
 
-            <a
-              href={`/posts/${selectedNode.slug}`}
-              className="mt-4 inline-block font-mono text-[11px] lowercase tracking-[0.12em] text-cyan-200/55 transition hover:text-cyan-100/90"
-            >
-              {t("openNote")}
-            </a>
+        <div className="absolute bottom-5 right-5 font-mono text-[10px] text-slate-600">
+          {t("stats", { links: graph?.links.length ?? 0, nodes: graph?.nodes.length ?? 0 })}
+        </div>
 
-            <div className="mt-5 border-t border-white/[0.06] pt-4">
-              <p className="font-mono text-[10px] lowercase tracking-[0.16em] text-slate-600">
-                {t("connectedNodes", { count: selectedConnections.length })}
-              </p>
-              <div className="mt-3 max-h-56 space-y-2 overflow-auto pr-1">
-                {selectedConnections.length > 0 ? (
-                  selectedConnections.map((node) => (
-                    <button
-                      key={node.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedId(node.id)
-                        focusNode(node, 1.8)
-                      }}
-                      className="block w-full rounded-sm border border-transparent px-2 py-1.5 text-left text-xs text-slate-400 transition hover:border-white/[0.06] hover:bg-white/[0.03] hover:text-slate-200"
-                    >
-                      <span
-                        className="mr-2 inline-block h-1.5 w-1.5 rounded-full align-middle"
-                        style={{ backgroundColor: getNodeTone(node.group) }}
-                      />
-                      {node.title}
-                    </button>
-                  ))
-                ) : (
-                  <p className="text-xs text-slate-600">{t("noConnections")}</p>
-                )}
-              </div>
+        {tooltip && (
+          <div
+            className="pointer-events-none absolute z-20 min-w-36 rounded-md border border-white/[0.045] bg-[#0b1020]/42 px-2.5 py-1.5 text-xs text-slate-500 shadow-lg shadow-black/20 backdrop-blur-2xl"
+            style={{
+              left: Math.min(tooltip.x + 14, dimensions.width - 210),
+              top: Math.min(tooltip.y + 14, dimensions.height - 92),
+            }}
+          >
+            <div className="text-xs text-slate-300">{tooltip.title}</div>
+            <div className="mt-1 font-mono text-[10px] text-slate-600">
+              {tooltip.group} · {t("linkCount", { count: tooltip.links })}
             </div>
-          </>
-        ) : (
-          <div>
-            <p className="font-mono text-[10px] lowercase tracking-[0.16em] text-slate-600">
-              {t("details")}
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-500">{t("selectHint")}</p>
           </div>
         )}
-      </aside>
+
+        <aside
+          className="absolute right-4 top-4 w-[min(18rem,calc(100%-2rem))] rounded-md border border-white/[0.065] bg-[#080d18]/45 p-4 text-slate-400 shadow-2xl shadow-black/25 backdrop-blur-2xl transition sm:right-5 sm:top-5"
+          style={{ opacity: selectedNode ? 0.96 : 0.58 }}
+        >
+          {selectedNode ? (
+            <>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-mono text-[10px] lowercase tracking-[0.16em] text-slate-600">
+                    {selectedNode.group}
+                  </p>
+                  <h2 className="mt-1 text-base leading-snug text-slate-200">{selectedNode.title}</h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedId(null)}
+                  className="font-mono text-xs text-slate-600 transition hover:text-slate-300"
+                  aria-label={t("clearSelection")}
+                >
+                  ×
+                </button>
+              </div>
+
+              <a
+                href={`/posts/${selectedNode.slug}`}
+                className="mt-4 inline-block font-mono text-[11px] lowercase tracking-[0.12em] text-cyan-200/55 transition hover:text-cyan-100/90"
+              >
+                {t("openNote")}
+              </a>
+
+              <div className="mt-5 border-t border-white/[0.06] pt-4">
+                <p className="font-mono text-[10px] lowercase tracking-[0.16em] text-slate-600">
+                  {t("connectedNodes", { count: selectedConnections.length })}
+                </p>
+                <div className="mt-3 max-h-56 space-y-2 overflow-auto pr-1">
+                  {selectedConnections.length > 0 ? (
+                    selectedConnections.map((node) => (
+                      <button
+                        key={node.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedId(node.id)
+                          focusNode(node, 1.8)
+                        }}
+                        className="block w-full rounded-sm border border-transparent px-2 py-1.5 text-left text-xs text-slate-400 transition hover:border-white/[0.06] hover:bg-white/[0.03] hover:text-slate-200"
+                      >
+                        <span
+                          className="mr-2 inline-block h-1.5 w-1.5 rounded-full align-middle"
+                          style={{ backgroundColor: getNodeTone(node.group) }}
+                        />
+                        {node.title}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="text-xs text-slate-600">{t("noConnections")}</p>
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div>
+              <p className="font-mono text-[10px] lowercase tracking-[0.16em] text-slate-600">
+                {t("details")}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">{t("selectHint")}</p>
+            </div>
+          )}
+        </aside>
+      </div>
     </section>
   )
 }
