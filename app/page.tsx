@@ -22,11 +22,38 @@ function noteDate(d: Date | null) {
     .replace(/-/g, ".")
 }
 
-async function safeHomeQuery<T>(label: string, query: Promise<T>, fallback: T): Promise<T> {
+function isTransientPrismaError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false
+  return (
+    error.message.includes("Connection terminated unexpectedly") ||
+    error.message.includes("Operation has timed out") ||
+    error.message.includes("P1001")
+  )
+}
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function safeHomeQuery<T>(label: string, query: () => Promise<T>, fallback: T): Promise<T> {
   try {
-    return await query
+    return await query()
   } catch (error) {
-    console.error(`HomePage: ${label} query failed:`, error)
+    if (isTransientPrismaError(error)) {
+      await delay(100)
+      try {
+        return await query()
+      } catch (retryError) {
+        if (process.env.NODE_ENV !== "production") {
+          console.warn(`HomePage: ${label} query retry failed:`, retryError)
+        }
+        return fallback
+      }
+    }
+
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(`HomePage: ${label} query failed:`, error)
+    }
     return fallback
   }
 }
@@ -35,9 +62,9 @@ export default async function HomePage() {
   const t = await getTranslations("home")
   const tCommon = await getTranslations("common")
 
-  const posts = await safeHomeQuery("posts", getHomePosts(14), [])
-  const categories = await safeHomeQuery("categories", getAllCategories(), [])
-  const tags = await safeHomeQuery("tags", getAllTags(), [])
+  const posts = await safeHomeQuery("posts", () => getHomePosts(14), [])
+  const categories = await safeHomeQuery("categories", () => getAllCategories(), [])
+  const tags = await safeHomeQuery("tags", () => getAllTags(), [])
 
   const sortedTags = [...tags]
     .sort((a, b) => b._count.documents - a._count.documents)
