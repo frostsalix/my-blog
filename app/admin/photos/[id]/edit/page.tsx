@@ -12,9 +12,9 @@ export default async function EditPhotoPage({ params }: { params: { id: string }
   if (!photo) notFound()
 
   return (
-    <div>
-      <header className="mb-8">
-        <h1 className="text-3xl font-serif tracking-tight">Edit Photo</h1>
+    <div className="space-y-8">
+      <header>
+        <h1 className="text-2xl font-medium">Edit Photo</h1>
       </header>
       <PhotoForm photo={photo} allTags={allTags} />
     </div>

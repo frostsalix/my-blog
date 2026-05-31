@@ -10,9 +10,9 @@ export default async function PhotosAdminPage() {
   const photos = await getAllPhotos()
 
   return (
-    <div>
-      <header className="mb-12">
-        <h1 className="text-3xl font-serif tracking-tight mb-2">
+    <div className="space-y-8">
+      <header>
+        <h1 className="text-2xl font-medium mb-2">
           {t("gallery")}
         </h1>
         <p className="text-sm text-muted-foreground">
@@ -20,10 +20,10 @@ export default async function PhotosAdminPage() {
         </p>
       </header>
 
-      <div className="mb-8">
+      <div>
         <Link
           href="/admin/photos/new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-foreground text-background hover:bg-foreground/90 transition-colors text-sm font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded bg-muted hover:bg-muted/80 transition-colors text-sm"
         >
           + Add Photo
         </Link>
@@ -31,7 +31,7 @@ export default async function PhotosAdminPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {photos.map((photo) => (
-          <div key={photo.id} className="group relative aspect-square rounded-lg overflow-hidden border border-border/20">
+          <div key={photo.id} className="group relative aspect-square rounded overflow-hidden border border-border/40">
             <Image
               src={photo.imageUrl}
               alt={photo.title}
@@ -61,7 +61,7 @@ export default async function PhotosAdminPage() {
       </div>
 
       {photos.length === 0 && (
-        <p className="text-center text-muted-foreground py-12">
+        <p className="text-center text-sm text-muted-foreground py-12">
           No photos yet. Add your first photo to get started.
         </p>
       )}

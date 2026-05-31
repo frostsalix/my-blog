@@ -7,9 +7,9 @@ export default async function NewPhotoPage() {
   const allTags = await prisma.tag.findMany({ orderBy: { name: "asc" } })
 
   return (
-    <div>
-      <header className="mb-8">
-        <h1 className="text-3xl font-serif tracking-tight">Add Photo</h1>
+    <div className="space-y-8">
+      <header>
+        <h1 className="text-2xl font-medium">Add Photo</h1>
       </header>
       <PhotoForm allTags={allTags} />
     </div>
