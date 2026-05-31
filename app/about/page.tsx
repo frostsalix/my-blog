@@ -20,7 +20,6 @@ const paragraphs = [
   "后来慢慢发现，比起单纯做一个博客，我好像更喜欢一点点搭建属于自己的空间。",
   "所以这里不只是用来放文章。我会在这里记录学习、保存一些零散想法，也会分享最近感兴趣的东西。有时候是技术，有时候是音乐、阅读，或者一些暂时还没有整理清楚的思考（甚至只是某个深夜突然冒出来的念头）。",
   "平时我喜欢跑步、篮球和乒乓球。运动对我来说很重要，它能让我重新回到一种比较专注、平静的状态。",
-  "音乐也是生活里不可缺少的一部分 🎧 我平时会听 R&B、欧美流行、乡村和纯音乐，最喜欢的专辑是《東京物语》。",
   "中度游戏爱好者，喜欢氛围好、剧情不错的游戏。",
   "有些音乐会让人很自然地安静下来，也会让人开始回忆、联想，或者单纯地发呆一会儿。",
   "除了技术之外，我也会看文学、历史、时事和一些政治相关内容。相比快速获取信息，我其实更在意自己能不能长期保持思考和感受世界的能力。",
@@ -42,6 +41,18 @@ export default function AboutPage() {
           {paragraphs.map((p, i) => (
             <p key={i}>{p}</p>
           ))}
+          <p>
+            音乐也是生活里不可缺少的一部分 🎧 我平时会听 R&B、欧美流行、乡村和纯音乐，最喜欢的专辑是
+            <a
+              href="https://music.163.com/#/album?id=75808773"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground/90 underline decoration-foreground/20 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground/40"
+            >
+              《東京物语》
+            </a>
+            。
+          </p>
         </div>
       </section>
 
