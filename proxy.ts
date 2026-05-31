@@ -20,7 +20,7 @@ export function proxy(request: NextRequest) {
   }
 
   // Track page view asynchronously (fire and forget)
-  const ip = request.ip || request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip")
+  const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || null
   const userAgent = request.headers.get("user-agent")
   const referer = request.headers.get("referer")
 
