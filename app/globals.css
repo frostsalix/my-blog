@@ -555,6 +555,14 @@ html {
   scrollbar-color: oklch(0.52 0.025 260 / 36%) oklch(0.09 0.014 260);
 }
 
+.site-brand-title {
+  font-family:
+    var(--font-brand),
+    var(--font-serif),
+    cursive;
+  letter-spacing: 0;
+}
+
 /* Editorial navigation overlay */
 .navigation-overlay {
   background: rgba(250, 248, 243, 0.97);
