@@ -1,6 +1,5 @@
 import { getTranslations } from "next-intl/server"
 import Link from "next/link"
-import Image from "next/image"
 import { HeaderNav } from "@/components/layout/HeaderNav"
 
 export async function Header() {
@@ -11,15 +10,8 @@ export async function Header() {
       <div className="mx-auto flex max-w-[760px] items-center justify-between gap-4 px-5 py-3.5 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2 font-mono text-[13px] text-foreground/78 transition-colors hover:text-foreground"
+          className="font-mono text-[13px] text-foreground/78 transition-colors hover:text-foreground"
         >
-          <Image
-            src="/title.jpg"
-            alt=""
-            width={24}
-            height={22}
-            className="opacity-85"
-          />
           {t("siteTitle")}
         </Link>
         <HeaderNav
