@@ -103,27 +103,6 @@ export default async function HomePage() {
     },
   ]
 
-  const focusTopics = [
-    t("focusKnowledge"),
-    t("focusAI"),
-    t("focusWriting"),
-    t("focusSystems"),
-  ]
-
-  const starterLinks = [
-    {
-      label: t("starterBegin"),
-      href: posts[0] ? `/posts/${posts[0].slug}` : "/posts",
-      meta: t("starterBeginMeta"),
-    },
-    {
-      label: t("starterRevisit"),
-      // TODO: Replace with a dedicated revisit/saved-notes route when available.
-      href: posts[1] ? `/posts/${posts[1].slug}` : "/posts",
-      meta: t("starterRevisitMeta"),
-    },
-  ]
-
   return (
     <main className="knowledge-home mx-auto w-full max-w-[1180px] px-5 pb-16 pt-12 sm:px-6 sm:pb-24 sm:pt-18">
       <section className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(300px,380px)] lg:gap-20">
@@ -131,12 +110,10 @@ export default async function HomePage() {
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/38">
             {t("indexLabel")}
           </p>
-          <h1 className="mt-5 max-w-3xl text-balance text-[clamp(36px,7.4vw,88px)] font-medium leading-[0.98] tracking-[-0.025em] text-foreground/92">
-            {t("knowledgeTitle")}
+          <h1 className="knowledge-hero-statement mt-6 max-w-4xl text-balance">
+            {t("knowledgeStatement")}{" "}
+            <span className="knowledge-hero-highlight">{t("knowledgeHighlight")}</span>
           </h1>
-          <p className="mt-5 max-w-xl text-sm leading-7 text-muted-foreground sm:text-[15px]">
-            {t("knowledgeIntro")}
-          </p>
 
           <nav aria-label={t("moduleNavigation")} className="mt-12 border-b border-foreground/10 sm:mt-16 dark:border-white/10">
             {modules.map((module, index) => (
@@ -206,54 +183,6 @@ export default async function HomePage() {
         </aside>
       </section>
 
-      <section className="mt-16 grid gap-px border border-foreground/10 bg-foreground/10 dark:border-white/10 dark:bg-white/10 md:grid-cols-2 lg:mt-24">
-        <section className="bg-background p-6 sm:p-7">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/42">
-            {t("currentFocus")}
-          </h2>
-          <ul className="mt-8 space-y-4">
-            {focusTopics.map((topic, index) => (
-              <li key={topic}>
-                <Link
-                  href={index === 0 && categories[0] ? `/categories/${categories[0].slug}` : "/search"}
-                  className="group flex items-center justify-between gap-4 text-sm text-foreground/68 transition-colors hover:text-foreground"
-                >
-                  <span>{topic}</span>
-                  <span className="font-mono text-muted-foreground/30 transition-transform group-hover:translate-x-1 group-hover:text-foreground/60">
-                    →
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="bg-background p-6 sm:p-7">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/42">
-            {t("starterTitle")}
-          </h2>
-          <ul className="mt-7 divide-y divide-foreground/8 dark:divide-white/8">
-            {starterLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="group grid gap-1 py-4 text-sm text-foreground/70 transition-colors hover:text-foreground"
-                >
-                  <span className="flex items-center justify-between gap-4">
-                    {link.label}
-                    <span className="font-mono text-muted-foreground/30 transition-transform group-hover:translate-x-1 group-hover:text-foreground/60">
-                      →
-                    </span>
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground/38">
-                    {link.meta}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </section>
     </main>
   )
 }

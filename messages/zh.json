@@ -150,6 +150,8 @@
     "indexLabel": "知识系统",
     "knowledgeTitle": "一个用于笔记、连接、工具和项目的工作索引。",
     "knowledgeIntro": "这是一个个人知识库，用来收集想法、连接资料，并把分散的观察整理成可复用的结构。",
+    "knowledgeStatement": "一个用于笔记、连接、工具和项目的工作索引。这是一个个人知识库，用来收集想法、连接资料，并把分散的观察整理成",
+    "knowledgeHighlight": "可复用的结构。",
     "moduleNavigation": "知识模块",
     "moduleNotes": "笔记",
     "moduleNotesDesc": "沉淀下来的思考、观察和长期参考。",
