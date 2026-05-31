@@ -6,7 +6,6 @@ import { NavigationMenu } from "@/components/layout/NavigationMenu"
 
 type HeaderNavProps = {
   labels: {
-    articles: string
     about: string
     search: string
   }

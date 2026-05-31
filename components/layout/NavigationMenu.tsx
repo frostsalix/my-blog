@@ -9,14 +9,12 @@ import { Menu, X } from "lucide-react"
 
 type NavigationMenuProps = {
   labels: {
-    articles: string
     about: string
     search: string
   }
 }
 
 const links = [
-  { href: "/posts", key: "articles" },
   { href: "/about", key: "about" },
   { href: "/search", key: "search" },
 ] as const
