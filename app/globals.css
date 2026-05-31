@@ -194,8 +194,8 @@
 /* Article prose: refined reading experience */
 .prose {
   font-family: var(--font-serif);
-  font-size: 1.0625rem;
-  line-height: 2;
+  font-size: 1rem;
+  line-height: 1.85;
   color: oklch(0.28 0 0);
 }
 
@@ -205,8 +205,8 @@
 
 @media (min-width: 640px) {
   .article-prose {
-    font-size: 1.125rem;
-    line-height: 2.05;
+    font-size: 1.0625rem;
+    line-height: 1.9;
   }
 }
 
@@ -334,7 +334,7 @@
   margin: 2.75rem 0;
   font-style: italic;
   color: oklch(0.32 0 0);
-  font-size: 1.22em;
+  font-size: 1.05em;
   line-height: 1.6;
 }
 
