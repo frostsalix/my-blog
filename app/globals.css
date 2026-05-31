@@ -164,38 +164,38 @@
 
 /* Article title: restrained editorial scale with word-aware wrapping. */
 .article-title {
-  font-size: 2.2rem;
-  line-height: 1.18;
-  letter-spacing: 0;
+  font-size: 2rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 @media (min-width: 481px) {
   .article-title {
-    font-size: 2.8rem;
-    line-height: 1.16;
+    font-size: 2.4rem;
+    line-height: 1.18;
   }
 }
 
 @media (min-width: 769px) {
   .article-title {
-    font-size: 3.65rem;
-    line-height: 1.14;
+    font-size: 2.85rem;
+    line-height: 1.16;
   }
 }
 
 @media (min-width: 1024px) {
   .article-title {
-    font-size: 4rem;
-    line-height: 1.13;
+    font-size: 3.2rem;
+    line-height: 1.15;
   }
 }
 
 /* Article prose: refined reading experience */
 .prose {
   font-family: var(--font-serif);
-  font-size: 1.0625rem;
-  line-height: 1.95;
+  font-size: 1rem;
+  line-height: 1.85;
   color: oklch(0.28 0 0);
 }
 
@@ -205,8 +205,8 @@
 
 @media (min-width: 640px) {
   .article-prose {
-    font-size: 1.125rem;
-    line-height: 1.94;
+    font-size: 1.0625rem;
+    line-height: 1.9;
   }
 }
 
@@ -288,8 +288,8 @@
 }
 
 .dark .prose strong {
-  color: rgba(232, 239, 252, 0.88);
-  font-weight: 600;
+  color: rgba(232, 239, 252, 0.82);
+  font-weight: 580;
 }
 
 /* Code blocks - calm and readable */
@@ -334,7 +334,7 @@
   margin: 2.75rem 0;
   font-style: italic;
   color: oklch(0.32 0 0);
-  font-size: 1.22em;
+  font-size: 0.95em;
   line-height: 1.6;
 }
 
@@ -348,24 +348,27 @@
 }
 
 .prose blockquote.pull-quote {
-  margin: 3rem 0;
-  padding-left: 1.6rem;
+  margin: 2.5rem 0;
+  padding-left: 1.5rem;
   border-left-width: 2px;
-  font-size: 1.35rem;
-  line-height: 1.58;
+  border-left-color: oklch(0.28 0 0 / 22%);
+  font-size: 1.28rem;
+  line-height: 1.62;
+  font-style: italic;
+  color: oklch(0.32 0 0 / 88%);
 }
 
 .dark .prose blockquote.pull-quote {
-  border-left-color: rgba(180, 200, 255, 0.28);
-  color: rgba(245, 248, 255, 0.9);
+  border-left-color: rgba(180, 200, 255, 0.24);
+  color: rgba(240, 245, 255, 0.86);
 }
 
 @media (min-width: 640px) {
   .prose blockquote.pull-quote {
-    margin: 3.25rem 0;
-    padding-left: 1.75rem;
-    font-size: 1.55rem;
-    line-height: 1.56;
+    margin: 2.75rem 0;
+    padding-left: 1.65rem;
+    font-size: 1.42rem;
+    line-height: 1.6;
   }
 }
 
@@ -487,4 +490,371 @@
 
 html {
   scrollbar-color: oklch(0.52 0.025 260 / 36%) oklch(0.09 0.014 260);
+}
+
+/* Editorial navigation overlay */
+.navigation-overlay {
+  background: rgba(250, 248, 243, 0.97);
+  color: oklch(0.22 0.01 70);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.dark .navigation-overlay {
+  background: rgba(3, 5, 9, 0.94);
+  color: oklch(0.955 0.006 260);
+}
+
+.navigation-menu-link {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans SC",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+  font-size: clamp(30px, 9vw, 48px);
+  font-weight: 550;
+  line-height: 1.24;
+  letter-spacing: 0.005em;
+  color: oklch(0.25 0.01 70 / 72%);
+}
+
+.navigation-menu-link:hover,
+.navigation-menu-link[aria-current="page"] {
+  color: oklch(0.18 0.01 70 / 94%);
+}
+
+.dark .navigation-menu-link {
+  color: oklch(0.92 0.012 260 / 72%);
+}
+
+.dark .navigation-menu-link:hover,
+.dark .navigation-menu-link[aria-current="page"] {
+  color: oklch(0.98 0.004 260 / 96%);
+}
+
+@media (min-width: 640px) {
+  .navigation-menu-link {
+    font-size: clamp(32px, 4vw, 56px);
+    line-height: 1.22;
+  }
+}
+
+.knowledge-module-label {
+  color: oklch(0.22 0.01 70 / 62%);
+}
+
+.kb-index-row:hover .knowledge-module-label,
+.kb-index-row[data-active="true"] .knowledge-module-label {
+  color: oklch(0.18 0.01 70 / 95%);
+}
+
+html.dark .knowledge-module-label {
+  color: oklch(0.93 0.01 260 / 46%);
+}
+
+html.dark .kb-index-row:hover .knowledge-module-label {
+  color: oklch(0.96 0.008 260 / 82%);
+}
+
+html.dark .kb-index-row[data-active="true"] .knowledge-module-label {
+  color: oklch(0.98 0.004 260 / 88%);
+}
+
+.knowledge-home {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: min(42rem, calc(100svh - 5rem));
+  align-items: center;
+}
+
+.knowledge-home::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 16% -3rem auto;
+  height: 58%;
+  background:
+    linear-gradient(102deg, transparent 0 8%, oklch(0.94 0.105 84 / 48%) 8% 36%, transparent 36% 42%),
+    linear-gradient(86deg, transparent 0 34%, oklch(0.82 0.15 24 / 20%) 34% 59%, transparent 59%),
+    linear-gradient(95deg, transparent 0 54%, oklch(0.78 0.16 232 / 16%) 54% 75%, transparent 75%);
+  clip-path: polygon(0 26%, 100% 0, 94% 73%, 10% 100%);
+  pointer-events: none;
+}
+
+.knowledge-hero-frame {
+  position: relative;
+  width: 100%;
+  padding-block: 2.5rem;
+}
+
+.knowledge-hero-frame::after {
+  content: "";
+  position: absolute;
+  right: 5%;
+  bottom: 9%;
+  left: 5%;
+  z-index: -1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(0.22 0.02 70 / 24%), transparent);
+}
+
+.knowledge-hero-statement {
+  position: relative;
+  z-index: 0;
+  margin-inline: auto;
+  color: oklch(0.17 0.012 70 / 94%);
+  font-family:
+    var(--font-heading),
+    "SimHei",
+    "Microsoft YaHei UI",
+    sans-serif;
+  font-size: 2.35rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.quote-line {
+  display: block;
+}
+
+.quote-line-equal {
+  margin-bottom: 0.08em;
+  color: oklch(0.35 0.08 245);
+  font-family:
+    var(--font-serif),
+    "Songti SC",
+    "SimSun",
+    serif;
+  font-size: 0.74em;
+  font-weight: 700;
+}
+
+.quote-line-fracture {
+  color: oklch(0.18 0.018 68 / 88%);
+}
+
+.quote-line-survive {
+  color: oklch(0.18 0.018 68);
+}
+
+.quote-line-day {
+  margin-top: 0.18em;
+  color: oklch(0.38 0.045 225 / 82%);
+  font-family:
+    var(--font-serif),
+    "Kaiti SC",
+    "KaiTi",
+    serif;
+  font-size: 0.58em;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.quote-line-light {
+  margin-top: 0.02em;
+}
+
+.quote-word {
+  position: relative;
+  display: inline-block;
+  margin-inline: 0.02em;
+  line-height: 0.98;
+}
+
+.quote-word-broken {
+  color: oklch(0.58 0.22 31);
+  font-family:
+    var(--font-display-cn),
+    "SimHei",
+    "Microsoft YaHei UI",
+    sans-serif;
+  text-shadow: 0.04em 0.04em 0 oklch(0.95 0.12 74 / 62%);
+  transform: rotate(-2deg);
+}
+
+.quote-word-pain {
+  color: oklch(0.5 0.2 15);
+  font-family:
+    var(--font-display-cn),
+    "SimHei",
+    "Microsoft YaHei UI",
+    sans-serif;
+  text-shadow: -0.035em 0.035em 0 oklch(0.81 0.18 45 / 38%);
+  transform: rotate(1.5deg);
+}
+
+.quote-word-stand {
+  color: oklch(0.22 0.16 286);
+  font-family:
+    var(--font-script-cn),
+    "STKaiti",
+    "KaiTi",
+    serif;
+  font-size: 1.12em;
+  font-weight: 400;
+}
+
+.quote-word-stand::after {
+  content: "";
+  position: absolute;
+  right: 0.08em;
+  bottom: 0.04em;
+  left: 0.08em;
+  z-index: -1;
+  height: 0.18em;
+  background: oklch(0.72 0.18 303 / 42%);
+  transform: rotate(-2deg);
+}
+
+.quote-punctuation {
+  color: oklch(0.28 0.015 70 / 70%);
+}
+
+.knowledge-hero-highlight {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  color: oklch(0.15 0.13 140);
+  font-family:
+    var(--font-script-cn),
+    var(--font-serif),
+    "STKaiti",
+    "KaiTi",
+    serif;
+  font-size: 0.88em;
+  font-weight: 400;
+  line-height: 1;
+  transform: rotate(-2deg);
+  transform-origin: 12% 70%;
+}
+
+.knowledge-hero-highlight::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -0.12em;
+  bottom: 0.01em;
+  left: -0.12em;
+  height: 0.48em;
+  background: oklch(0.8 0.21 136 / 72%);
+  border-radius: 48% 42% 46% 54% / 52% 44% 58% 48%;
+  clip-path: polygon(
+    0 46%,
+    8% 26%,
+    19% 34%,
+    31% 22%,
+    45% 32%,
+    58% 24%,
+    72% 34%,
+    86% 26%,
+    100% 42%,
+    97% 88%,
+    82% 78%,
+    68% 92%,
+    53% 80%,
+    39% 90%,
+    24% 78%,
+    10% 94%,
+    3% 78%
+  );
+  transform: rotate(-3deg) skewX(-9deg);
+  transform-origin: 50% 100%;
+}
+
+@media (min-width: 640px) {
+  .knowledge-hero-statement {
+    font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .knowledge-hero-frame {
+    padding-block: 4.5rem;
+  }
+
+  .knowledge-hero-statement {
+    font-size: 5.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .knowledge-hero-statement {
+    font-size: 6rem;
+  }
+}
+
+html.dark .knowledge-home::before {
+  background:
+    linear-gradient(102deg, transparent 0 8%, oklch(0.48 0.14 74 / 20%) 8% 36%, transparent 36% 42%),
+    linear-gradient(86deg, transparent 0 34%, oklch(0.54 0.15 24 / 16%) 34% 59%, transparent 59%),
+    linear-gradient(95deg, transparent 0 54%, oklch(0.58 0.16 232 / 18%) 54% 75%, transparent 75%);
+}
+
+html.dark .knowledge-hero-frame::after {
+  background: linear-gradient(90deg, transparent, oklch(0.9 0.02 260 / 18%), transparent);
+}
+
+html.dark .knowledge-hero-statement {
+  color: oklch(0.96 0.008 260 / 92%);
+}
+
+html.dark .quote-line-equal {
+  color: oklch(0.82 0.11 242);
+}
+
+html.dark .quote-line-fracture,
+html.dark .quote-line-survive {
+  color: oklch(0.98 0.006 260 / 88%);
+}
+
+html.dark .quote-line-day {
+  color: oklch(0.8 0.06 225 / 78%);
+}
+
+html.dark .quote-word-broken {
+  color: oklch(0.72 0.2 34);
+  text-shadow: 0.04em 0.04em 0 oklch(0.44 0.14 74 / 42%);
+}
+
+html.dark .quote-word-pain {
+  color: oklch(0.74 0.18 21);
+  text-shadow: -0.035em 0.035em 0 oklch(0.42 0.12 25 / 42%);
+}
+
+html.dark .quote-word-stand {
+  color: oklch(0.78 0.16 292);
+}
+
+html.dark .quote-word-stand::after {
+  background: oklch(0.65 0.17 303 / 34%);
+}
+
+html.dark .knowledge-hero-highlight {
+  color: oklch(0.9 0.08 146);
+}
+
+html.dark .knowledge-hero-highlight::before {
+  background: oklch(0.74 0.18 140 / 56%);
+}
+
+body:has(.sayliks-intro-home) {
+  overflow: hidden;
+  background: #000;
+}
+
+body:has(.sayliks-intro-home) > header,
+body:has(.sayliks-intro-home) > footer {
+  display: none;
+}
+
+body:has(.sayliks-intro-home) > main {
+  min-height: 100dvh;
 }

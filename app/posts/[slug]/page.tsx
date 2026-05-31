@@ -87,8 +87,8 @@ export default async function PostPage({
 
   return (
     <article className="relative">
-      <header className="mx-auto max-w-[760px] px-5 pb-9 pt-[72px] sm:px-6 sm:pb-11 sm:pt-24 lg:pt-[112px]">
-        <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase text-muted-foreground/38">
+      <header className="mx-auto max-w-[760px] px-5 pb-8 pt-16 sm:px-6 sm:pb-10 sm:pt-20 lg:pt-24">
+        <div className="mb-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase text-muted-foreground/38">
           <time dateTime={post.publishedAt?.toISOString()}>
             {post.publishedAt ? formatDateLong(post.publishedAt) : t("draft")}
           </time>
@@ -120,13 +120,13 @@ export default async function PostPage({
         </h1>
 
         {post.summary && (
-          <p className="mt-7 max-w-[680px] font-serif text-lg leading-[1.85] text-muted-foreground/75 sm:text-xl">
+          <p className="mt-5 max-w-[680px] font-serif text-lg leading-[1.85] text-muted-foreground/75 sm:text-xl">
             {post.summary}
           </p>
         )}
 
         {tags.length > 0 && (
-          <div className="mt-7 flex flex-wrap gap-x-4 gap-y-2">
+          <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2">
             {tags.map((tag) => (
               <Link
                 key={tag.id}
