@@ -17,13 +17,22 @@ export async function getAnalyticsStats(days = 7) {
       distinct: ["ip"],
     }).then((results) => results.length),
 
-    // Recent visits
-    prisma.pageView.findMany({
+    // Recent visits aggregated by IP
+    prisma.pageView.groupBy({
+      by: ["ip"],
       where: { createdAt: { gte: startDate } },
-      select: { id: true, ip: true },
-      orderBy: { createdAt: "desc" },
+      _count: { id: true },
+      orderBy: [
+        { _count: { id: "desc" } },
+        { ip: "asc" },
+      ],
       take: 50,
-    }),
+    }).then((results) =>
+      results.map((result) => ({
+        ip: result.ip,
+        count: result._count.id,
+      }))
+    ),
   ])
 
   return {

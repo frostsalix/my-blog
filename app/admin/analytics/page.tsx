@@ -70,13 +70,19 @@ export default async function AnalyticsPage() {
             <thead>
               <tr className="border-b border-white/45 bg-white/20 dark:border-white/10 dark:bg-white/[0.025]">
                 <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">{t("ip")}</th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">{t("times")}</th>
               </tr>
             </thead>
             <tbody>
               {stats.recentVisits.map((visit) => (
-                <tr key={visit.id} className="border-b border-white/35 transition-colors last:border-0 hover:bg-white/28 dark:border-white/10 dark:hover:bg-white/[0.045]">
+                <tr key={visit.ip ?? "unknown"} className="border-b border-white/35 transition-colors last:border-0 hover:bg-white/28 dark:border-white/10 dark:hover:bg-white/[0.045]">
                   <td className="px-4 py-3 text-sm font-mono">
                     {visit.ip || "-"}
+                  </td>
+                  <td className="px-4 py-3 text-right text-sm font-medium tabular-nums">
+                    <span className="inline-flex min-w-12 justify-center rounded-md border border-white/45 bg-white/30 px-2.5 py-1 dark:border-white/10 dark:bg-white/[0.035]">
+                      {visit.count}
+                    </span>
                   </td>
                 </tr>
               ))}
